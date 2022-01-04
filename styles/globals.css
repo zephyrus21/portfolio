@@ -4,6 +4,11 @@
 :root {
   --primary-font: "Montserrat", sans-serif;
   --secondary-font: "Fira Code", monospace;
+  --bg-color: #0f1624;
+  --primary-text-color: #e5ebff;
+  --secondary-text-color: #7d8eaf;
+  --primary-color: #64ffda;
+  --secondary-color: #00bfff;
 }
 
 html,
@@ -11,5 +16,6 @@ body {
   padding: 0;
   margin: 0;
   font-family: var(--primary-font);
+  font-size: 14px;
   color: white;
 }

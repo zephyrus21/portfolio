@@ -8,7 +8,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Create Next App</title>
+        <title>Piyush Pandey</title>
         <meta name='description' content='Piyush Pandey Portfolio Website' />
         <link rel='icon' href='/favicon.ico' />
       </Head>

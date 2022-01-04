@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Header from "../components/Header";
-import NavBar from "../components/NavBar";
+import { NavBar, Header, About, Skills } from "../components";
+
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -18,9 +18,10 @@ const Home: NextPage = () => {
         <Header />
       </main>
 
-      <section>About</section>
-      <section>Skills</section>
+      <About />
+      <Skills />
       <section>Projects</section>
+      <section>Contact</section>
       <footer>Footer</footer>
     </>
   );

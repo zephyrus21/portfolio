@@ -31,7 +31,9 @@ export const SubTitle = styled.p`
   letter-spacing: 0.02em;
 `;
 
-export const Button = styled.button`
+export const Button = styled.a`
+  /* text-decoration: none; */
+  display: inline-block;
   font-family: var(--secondary-font);
   margin-top: 30px;
   font-size: 1.2rem;

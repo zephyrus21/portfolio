@@ -11,7 +11,11 @@ const Header: React.FC<HeaderProps> = ({}) => {
       <SubTitle>
         looking for oppurtinities in different fields as well.
       </SubTitle>
-      <Button>My Resume</Button>
+      <Button
+        href='https://drive.google.com/file/d/1wjn8sJSLxvd3sX8pFOlxHfZDMSAl1GRS/view?usp=sharing'
+        target='_blank'>
+        My Resume
+      </Button>
     </Wrapper>
   );
 };

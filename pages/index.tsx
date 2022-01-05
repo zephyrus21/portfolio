@@ -25,11 +25,11 @@ const Home: NextPage = () => {
 
       <Layout>
         <Header />
-        <About />
+        {/* <About />
         <Skills />
         <section>Projects</section>
         <section>Contact</section>
-        <footer>Footer</footer>
+        <footer>Footer</footer> */}
       </Layout>
     </>
   );

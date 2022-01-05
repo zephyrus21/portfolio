@@ -14,7 +14,7 @@ const Home: NextPage = () => {
         <meta property='og:url' content='http://portfolio.piyushpandey.tech' />
         <meta
           property='og:image'
-          content='https://github.com/zephyrus21/zephyrus21.github.io/blob/main/Assets/head.png'
+          content='https://raw.githubusercontent.com/zephyrus21/zephyrus21.github.io/main/Assets/head.png'
         />
         <meta
           property='og:description'

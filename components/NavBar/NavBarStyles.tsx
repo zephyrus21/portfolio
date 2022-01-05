@@ -40,9 +40,10 @@ export const StyledLink = styled.a`
   padding: 0 1rem;
   text-decoration: none;
   color: white;
-  transition: all 0.2s ease-out;
+  transition: all 0.4s ease-out;
 
   &:hover {
     color: var(--primary-color);
+    transform: translateY(-6px);
   }
 `;

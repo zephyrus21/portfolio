@@ -1,8 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { NavBar, Header, About, Skills } from "../components";
-
-import styles from "../styles/Home.module.css";
+import { Header, About, Skills } from "../components";
+import Layout from "../Layout";
 
 const Home: NextPage = () => {
   return (
@@ -13,15 +12,14 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main className={styles.main}>
-        <NavBar />
+      <Layout>
         <Header />
         <About />
         <Skills />
         <section>Projects</section>
         <section>Contact</section>
         <footer>Footer</footer>
-      </main>
+      </Layout>
     </>
   );
 };

@@ -16,13 +16,12 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <NavBar />
         <Header />
+        <About />
+        <Skills />
+        <section>Projects</section>
+        <section>Contact</section>
+        <footer>Footer</footer>
       </main>
-
-      <About />
-      <Skills />
-      <section>Projects</section>
-      <section>Contact</section>
-      <footer>Footer</footer>
     </>
   );
 };

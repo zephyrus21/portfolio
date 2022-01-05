@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  padding: 120px 140px;
+  padding: 12rem 12rem;
+  padding-bottom: 17rem;
+  background: url("/images/home.png");
+  background-size: cover;
+  /* background-attachment: fixed; */
 `;
 
 export const SubHeading = styled.h2`

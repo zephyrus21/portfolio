@@ -1,7 +1,5 @@
 .main {
   min-height: 100vh;
-  padding: 2rem;
-  background: url("/images/home.png");
-  background-size: cover;
-  /* background-attachment: fixed; */
+  display: flex;
+  flex-direction: column;
 }

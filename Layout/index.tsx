@@ -1,5 +1,5 @@
 import { NavBar } from "../components";
-import SideElements from "../components/SideElements";
+import { SideElements } from "../components";
 import { Wrapper } from "./LayoutStyles";
 
 interface LayoutProps {}

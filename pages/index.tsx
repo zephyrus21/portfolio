@@ -9,6 +9,11 @@ const Home: NextPage = () => {
       <Head>
         <title>Piyush Pandey</title>
         <meta name='description' content='Piyush Pandey Portfolio Website' />
+        <meta property='og:title' content='Piyush Pandey' />
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content='http://portfolio.piyushpandey.tech' />
+        <meta property='og:image:url' content='/head.png' />
+        <meta property='og:description' content='Site description' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
 

@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+interface WrapperProps {
+  sticky: boolean;
+}
+
+export const Wrapper = styled.div<WrapperProps>`
   height: 100px;
   position: fixed;
   box-shadow: ${(props) =>

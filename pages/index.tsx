@@ -12,8 +12,14 @@ const Home: NextPage = () => {
         <meta property='og:title' content='Piyush Pandey' />
         <meta property='og:type' content='website' />
         <meta property='og:url' content='http://portfolio.piyushpandey.tech' />
-        <meta property='og:image:url' content='/head.png' />
-        <meta property='og:description' content='Site description' />
+        <meta
+          property='og:image'
+          content='https://github.com/zephyrus21/zephyrus21.github.io/blob/main/Assets/head.png'
+        />
+        <meta
+          property='og:description'
+          content='Piyush Pandey Portfolio Website'
+        />
         <link rel='icon' href='/favicon.ico' />
       </Head>
 

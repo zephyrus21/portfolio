@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Nav, NavMenu, StyledLink, Wrapper } from "./NavBarStyles";
+import { Nav, NavMenu, StyledLink, Wrapper, Imagee } from "./NavBarStyles";
 
 interface NavBarProps {}
 
@@ -33,7 +33,14 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
   return (
     <Wrapper sticky={sticky}>
       <Nav>
-        <Link href='#'>Logo</Link>
+        <Link passHref href='#'>
+          <Imagee
+            src='/images/logo.svg'
+            alt='logo'
+            width='50px'
+            height='50px'
+          />
+        </Link>
         <NavMenu>
           <Link href='#about' passHref>
             <StyledLink>About</StyledLink>

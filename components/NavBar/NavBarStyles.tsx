@@ -1,8 +1,15 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 interface WrapperProps {
   sticky: boolean;
 }
+
+export const Imagee = styled(Image)`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+`;
 
 export const Wrapper = styled.div<WrapperProps>`
   height: ${(props) => (props.sticky ? "70px" : "100px")};
@@ -25,6 +32,7 @@ export const Wrapper = styled.div<WrapperProps>`
 export const Nav = styled.nav`
   width: 100%;
   display: flex;
+  align-items: center;
   justify-content: space-between;
 `;
 

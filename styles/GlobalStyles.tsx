@@ -83,6 +83,11 @@ export const SkillsList = styled.div`
     transition: all 0.4s;
   }
 
+  ${StyledIconBase}:hover {
+    color: var(--primary-color);
+    transform: translateY(-4px);
+  }
+
   margin-left: 20px;
   display: flex;
   justify-content: space-between;

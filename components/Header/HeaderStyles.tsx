@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  padding: 12rem 12rem;
+  padding: 12rem;
   padding-bottom: 17rem;
   background: url("/images/home.png");
   background-size: cover;

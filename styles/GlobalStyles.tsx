@@ -93,7 +93,7 @@ export const SkillsList = styled.div`
   justify-content: space-between;
 `;
 
-export const StyledList = styled.p`
+export const StyledList = styled.div`
   ${StyledIconBase} {
     color: var(--primary-color);
     height: 16px;

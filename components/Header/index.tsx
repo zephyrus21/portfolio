@@ -4,7 +4,7 @@ interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
   return (
-    <Wrapper>
+    <Wrapper id=''>
       <SubHeading>Hi, my name is</SubHeading>
       <Heading>Piyush Pandey</Heading>
       <SubTitle>I am a student and a passionate full stack developer</SubTitle>

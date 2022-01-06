@@ -28,7 +28,7 @@ interface SkillsProps {}
 
 const Skills: React.FC<SkillsProps> = ({}) => {
   return (
-    <Wrapper>
+    <Wrapper id='skills'>
       <Heading>Skills</Heading>
       <Paragraph>
         I&apos;ve worked with multiple technologies as a developer to develop &

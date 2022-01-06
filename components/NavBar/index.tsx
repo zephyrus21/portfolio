@@ -21,21 +21,30 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     }
   };
 
+  // const removeHash = () => {
+  //   console.log("Hello");
+  //   history.pushState(
+  //     "",
+  //     document.title,
+  //     window.location.pathname + window.location.search
+  //   );
+  // };
+
   return (
     <Wrapper sticky={sticky}>
       <Nav>
-        <h1>Logo</h1>
+        <Link href='#'>Logo</Link>
         <NavMenu>
-          <Link href='/' passHref>
+          <Link href='#about' passHref>
             <StyledLink>About</StyledLink>
           </Link>
-          <Link href='/' passHref>
+          <Link href='#skills' passHref>
             <StyledLink>Skills</StyledLink>
           </Link>
-          <Link href='/' passHref>
+          <Link href='#projects' passHref>
             <StyledLink>Projects</StyledLink>
           </Link>
-          <Link href='/' passHref>
+          <Link href='#contact' passHref>
             <StyledLink>Contact</StyledLink>
           </Link>
         </NavMenu>

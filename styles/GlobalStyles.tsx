@@ -6,6 +6,16 @@ export const Wrapper = styled.div`
   padding: 10rem 16rem;
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 900px) {
+    & {
+      padding: 12rem 8rem;
+    }
+  }
+  @media only screen and (max-width: 500px) {
+    & {
+      padding: 12rem 3rem;
+    }
+  }
 `;
 
 export const Heading = styled.h1`
@@ -56,7 +66,7 @@ export const Paragraph = styled.p`
 `;
 
 export const ListWrapper = styled.div`
-  width: 340px;
+  max-width: 24.5rem;
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
@@ -78,8 +88,8 @@ export const SkillsWrapper = styled.div`
 export const SkillsList = styled.div`
   ${StyledIconBase} {
     color: var(--primary-text-color);
-    height: 50px;
-    width: 50px;
+    height: 3.5rem;
+    width: 3.5rem;
     transition: all 0.4s;
   }
 
@@ -96,8 +106,8 @@ export const SkillsList = styled.div`
 export const StyledList = styled.div`
   ${StyledIconBase} {
     color: var(--primary-color);
-    height: 16px;
-    width: 16px;
+    height: 1.15rem;
+    width: 1.15rem;
     transition: all 0.4s;
   }
 

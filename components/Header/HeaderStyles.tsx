@@ -1,25 +1,46 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  padding: 12rem;
+  padding: 12rem 16rem;
   padding-bottom: 17rem;
   background: url("/images/home.png");
   background-size: cover;
   /* background-attachment: fixed; */
+  @media only screen and (max-width: 900px) {
+    & {
+      padding: 12rem 8rem;
+    }
+  }
+
+  @media only screen and (max-width: 500px) {
+    & {
+      padding: 12rem 3rem;
+    }
+  }
 `;
 
 export const SubHeading = styled.h2`
   font-family: var(--secondary-font);
   font-size: 1.7rem;
   color: var(--primary-color);
+  @media only screen and (max-width: 900px) {
+    & {
+      font-size: 1.3rem;
+    }
+  }
 `;
 
 export const Heading = styled.h1`
   font-size: 6.85rem;
   color: var(--primary-text-color);
   letter-spacing: 0.04em;
-  transform: translateX(-8px);
+  transform: translateX(-4px);
   padding: 30px 0;
+  @media only screen and (max-width: 900px) {
+    & {
+      font-size: 4rem;
+    }
+  }
 `;
 
 export const SubTitle = styled.p`

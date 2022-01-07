@@ -4,6 +4,9 @@ import styled from "styled-components";
 interface WrapperProps {
   sticky: boolean;
 }
+interface SideMenuProps {
+  sideBarOpen: boolean;
+}
 
 export const Imagee = styled(Image)`
   width: 50px;
@@ -25,8 +28,13 @@ export const Wrapper = styled.div<WrapperProps>`
   padding: 0 5rem;
   background-color: rgba(15, 22, 36, 0.5);
   backdrop-filter: blur(10px);
-  z-index: 11;
   transition: all 0.4s ease-in-out;
+  z-index: 9;
+  @media only screen and (max-width: 500px) {
+    & {
+      padding: 0 2rem;
+    }
+  }
 `;
 
 export const Nav = styled.nav`
@@ -42,6 +50,26 @@ export const NavMenu = styled.div`
   gap: 4rem;
 `;
 
+export const SideMenu = styled.aside<SideMenuProps>`
+  right: 0;
+  top: 0;
+  min-height: 72vh;
+  position: fixed;
+  transition: all 0.4s ease-in-out;
+  transition-delay: 0.15s;
+  z-index: 10;
+  transform: ${(props) =>
+    props.sideBarOpen ? "translateX(0)" : "translateX(40rem)"};
+  background-color: #1c325c;
+  backdrop-filter: blur(10px);
+  opacity: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10rem;
+`;
+
 export const StyledLink = styled.a`
   font-family: var(--secondary-font);
   font-size: 1.4rem;
@@ -52,6 +80,6 @@ export const StyledLink = styled.a`
 
   &:hover {
     color: var(--primary-color);
-    transform: translateY(-6px);
+    transform: translateY(-4px);
   }
 `;

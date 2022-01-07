@@ -1,11 +1,24 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Nav, NavMenu, StyledLink, Wrapper, Imagee } from "./NavBarStyles";
+import { useContext, useEffect, useState } from "react";
+import { Squash as Hamburger } from "hamburger-react";
+import { GlobalContext } from "../../context/Globalcontext";
+import {
+  Nav,
+  NavMenu,
+  StyledLink,
+  Wrapper,
+  Imagee,
+  SideMenu,
+} from "./NavBarStyles";
 
 interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
+  const { width }: any = useContext(GlobalContext);
+
+  const [sideBarOpen, setSideBarOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
+
   useEffect(() => {
     window.addEventListener("scroll", stickNavbar);
 
@@ -21,40 +34,61 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     }
   };
 
-  // const removeHash = () => {
-  //   console.log("Hello");
-  //   history.pushState(
-  //     "",
-  //     document.title,
-  //     window.location.pathname + window.location.search
-  //   );
-  // };
-
   return (
     <Wrapper sticky={sticky}>
       <Nav>
         <Link passHref href='#'>
-          <Imagee
-            src='/images/logo.svg'
-            alt='logo'
-            width='50px'
-            height='50px'
-          />
+          <a>
+            <Imagee
+              src='/images/logo.svg'
+              alt='logo'
+              width='50px'
+              height='50px'
+            />
+          </a>
         </Link>
-        <NavMenu>
-          <Link href='#about' passHref>
-            <StyledLink>About</StyledLink>
-          </Link>
-          <Link href='#skills' passHref>
-            <StyledLink>Skills</StyledLink>
-          </Link>
-          <Link href='#projects' passHref>
-            <StyledLink>Projects</StyledLink>
-          </Link>
-          <Link href='#contact' passHref>
-            <StyledLink>Contact</StyledLink>
-          </Link>
-        </NavMenu>
+        {width ? (
+          <NavMenu>
+            <Link href='#about' passHref>
+              <StyledLink>About</StyledLink>
+            </Link>
+            <Link href='#skills' passHref>
+              <StyledLink>Skills</StyledLink>
+            </Link>
+            <Link href='#projects' passHref>
+              <StyledLink>Projects</StyledLink>
+            </Link>
+            <Link href='#contact' passHref>
+              <StyledLink>Contact</StyledLink>
+            </Link>
+          </NavMenu>
+        ) : (
+          <>
+            <div
+              style={{
+                zIndex: 12,
+              }}
+              onClick={() => {
+                setSideBarOpen(!sideBarOpen);
+              }}>
+              <Hamburger />
+            </div>
+            <SideMenu sideBarOpen={sideBarOpen}>
+              <Link href='#about' passHref>
+                <StyledLink>About</StyledLink>
+              </Link>
+              <Link href='#skills' passHref>
+                <StyledLink>Skills</StyledLink>
+              </Link>
+              <Link href='#projects' passHref>
+                <StyledLink>Projects</StyledLink>
+              </Link>
+              <Link href='#contact' passHref>
+                <StyledLink>Contact</StyledLink>
+              </Link>
+            </SideMenu>
+          </>
+        )}
       </Nav>
     </Wrapper>
   );

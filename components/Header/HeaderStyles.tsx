@@ -14,7 +14,8 @@ export const Wrapper = styled.div`
 
   @media only screen and (max-width: 500px) {
     & {
-      padding: 12rem 3rem;
+      padding: 15rem 3rem;
+      padding-bottom: 12rem;
     }
   }
 `;

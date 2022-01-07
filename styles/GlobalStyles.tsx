@@ -101,6 +101,13 @@ export const SkillsList = styled.div`
   margin-left: 20px;
   display: flex;
   justify-content: space-between;
+
+  @media only screen and (max-width: 500px) {
+    ${StyledIconBase} {
+      height: 2.8rem;
+      width: 2.8rem;
+    }
+  }
 `;
 
 export const StyledList = styled.div`

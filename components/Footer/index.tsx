@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { GlobalContext } from "../../context/Globalcontext";
-import { StyledLink } from "../SideElements/SideElementsStyles";
+import { StyledEmail, StyledLink } from "../SideElements/SideElementsStyles";
 import { Content, Social, Wrapper } from "./FooterStyles";
 import {
   GithubOutline,
@@ -49,7 +49,9 @@ const Footer: React.FC<FooterProps> = ({}) => {
           </StyledLink>
         </Social>
       )}
-      <Content>Designed & Developed by Piyush</Content>
+      <Link href='https://portfolio.piyushpandey.tech' passHref>
+        <Content>Designed & Developed by Piyush</Content>
+      </Link>
     </Wrapper>
   );
 };

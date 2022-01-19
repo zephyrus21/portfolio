@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Header, About, Skills, Footer } from "../components";
+import { Header, About, Skills, Contact, Footer } from "../components";
 import Layout from "../Layout";
 
 const Home: NextPage = () => {
@@ -27,10 +27,9 @@ const Home: NextPage = () => {
         <Header />
         <About />
         <Skills />
+        {/* <Projects /> */}
+        <Contact />
         <Footer />
-        {/* <section>Projects</section>
-        <section>Contact</section>
-        <footer>Footer</footer> */}
       </Layout>
     </>
   );

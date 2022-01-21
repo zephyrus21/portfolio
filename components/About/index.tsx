@@ -36,7 +36,7 @@ const About: React.FC<AboutProps> = ({}) => {
       <ListWrapper>
         <StyledList>
           <RightArrow />
-          Go lang
+          Golang
         </StyledList>
         <StyledList>
           <RightArrow />

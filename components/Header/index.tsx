@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
         looking for oppurtinities in different fields as well.
       </SubTitle>
       <Button
-        href='https://drive.google.com/file/d/1wjn8sJSLxvd3sX8pFOlxHfZDMSAl1GRS/view?usp=sharing'
+        href='https://drive.google.com/file/d/1QQmq0W7XY_eZrSTffC5iBx-LKcL5Dq3l/view?usp=sharing'
         target='_blank'>
         My Resume
       </Button>

@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageChrome from '../components/PageChrome.astro';
+import Footer from '../components/Footer.astro';
+
+const posts = [
+  { year: '2026', title: 'Moving 100 million events a day without losing your nerve.', tag: 'Engineering', slug: 'moving-100m-events' },
+  { year: '2026', title: 'On rewriting TypeScript services to Go — and what it cost.', tag: 'Notes', slug: 'typescript-to-go' },
+  { year: '2025', title: 'Observability for the rest of us: a Prometheus / Grafana primer.', tag: 'Essay', slug: 'observability-primer' },
+  { year: '2025', title: 'Choosing a datastore: a small field guide for backend engineers.', tag: 'Engineering', slug: 'choosing-a-datastore' },
+  { year: '2024', title: 'Pub/Sub, retries, and the politics of "at-least-once".', tag: 'Essay', slug: 'pubsub-retries' },
+  { year: '2024', title: 'The hidden cost of distributed transactions.', tag: 'Engineering', slug: 'distributed-transactions' },
+  { year: '2024', title: 'Rate limiting at scale: token buckets, sliding windows, and tradeoffs.', tag: 'Notes', slug: 'rate-limiting' },
+  { year: '2023', title: 'Building internal tooling that people actually use.', tag: 'Essay', slug: 'internal-tooling' },
+  { year: '2023', title: 'On context switching and the myth of multitasking in engineering.', tag: 'Notes', slug: 'context-switching' },
+];
+---
+
+<Layout title="Writing — Piyush Pandey">
+  <PageChrome active="blog" />
+
+  <main class="page-main">
+    <section class="page-hero">
+      <div class="eyebrow reveal"><span class="num">01</span><span class="bar"></span><span>Writing</span></div>
+      <h1 class="h-display reveal" style="margin-top: 28px;">
+        Notes from the <em>margins</em>.
+      </h1>
+      <p class="page-hero-sub reveal">
+        Essays, notes, and field guides on building software at scale.
+      </p>
+    </section>
+
+    <section class="writing-page-section">
+      <div class="writing-list">
+        {posts.map((post) => (
+          <a class="writing-row reveal" href={`/blog/${post.slug}`}>
+            <span class="date">{post.year}</span>
+            <span class="title">{post.title}</span>
+            <span class="tag">{post.tag}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-main {
+    padding-top: 80px;
+  }
+
+  .page-hero {
+    padding: var(--pad-y) var(--gutter);
+    border-top: 0;
+    max-width: 900px;
+  }
+
+  .page-hero-sub {
+    margin-top: 28px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(18px, 2vw, 24px);
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .writing-page-section {
+    padding: 0 var(--gutter) var(--pad-y);
+    border-top: 1px solid var(--rule);
+  }
+
+  .writing-list {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

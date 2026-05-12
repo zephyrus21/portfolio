@@ -2,14 +2,14 @@
 ---
 
 <section class="hero" id="top">
-  <div class="lockup">
-    <div class="eyebrow reveal">
-      <span class="num">01</span><span class="bar"></span><span>Portfolio · MMXXVI</span>
-    </div>
+  <div class="hero-label eyebrow reveal">
+    <span class="num">00</span><span class="bar"></span><span>Portfolio · MMXXVI</span>
+  </div>
 
+  <div class="lockup">
     <h1 class="hero-name" id="heroName" aria-label="Piyush Pandey">
       <span class="word" data-word="Piyush"></span>
-      <span class="word" data-word="Pandey" data-italic="true"></span>
+      <span class="word" data-word="Pandey"></span>
     </h1>
 
     <div class="hero-meta">
@@ -34,8 +34,19 @@
     var root = document.getElementById('heroName');
     var words = root.querySelectorAll('.word');
     var isMobile = window.matchMedia('(pointer: coarse)').matches;
-    var globalIdx = 0;
 
+    if (isMobile) {
+      /* On touch: render plain text, no char-splitting, no animation */
+      words.forEach(function (w) {
+        var italic = w.dataset.italic === 'true';
+        w.innerHTML = italic
+          ? '<em>' + w.dataset.word + '</em>'
+          : w.dataset.word;
+      });
+      return;
+    }
+
+    var globalIdx = 0;
     words.forEach(function (w) {
       var txt = w.dataset.word;
       var italic = w.dataset.italic === 'true';
@@ -43,35 +54,34 @@
       w.innerHTML = '';
       for (var i = 0; i < len; i++) {
         var s = document.createElement('span');
-        s.className = 'char' + (italic ? ' italic' : '');
-        if (!isMobile) s.classList.add('entering');
+        s.className = 'char entering' + (italic ? ' italic' : '');
         s.textContent = txt[i];
         var mid = (len - 1) / 2;
         var offset = (i - mid) / mid;
         s.style.setProperty('--cw', (offset * 28).toFixed(1));
         s.style.setProperty('--ch', (Math.abs(offset) * 14).toFixed(1));
-        if (!isMobile) s.style.setProperty('--cd', (260 + globalIdx * 55) + 'ms');
+        s.style.setProperty('--cd', (260 + globalIdx * 55) + 'ms');
         w.appendChild(s);
         globalIdx++;
       }
     });
 
-    if (!isMobile) {
-      requestAnimationFrame(function () {
-        root.querySelectorAll('.char').forEach(function (c) {
-          c.classList.remove('entering');
-          c.classList.add('entered');
-        });
+    requestAnimationFrame(function () {
+      /* Force the browser to commit the entering state (translateY(110%), opacity:0)
+         before we swap classes. Without this reflow, the browser batches both the
+         "from" and "to" states into a single paint and the transition never fires. */
+      void root.offsetHeight;
+      root.querySelectorAll('.char').forEach(function (c) {
+        c.classList.remove('entering');
+        c.classList.add('entered');
       });
+    });
 
-      setTimeout(function () {
-        root.querySelectorAll('.char').forEach(function (c) {
-          c.style.transition = 'none';
-        });
-      }, 1500);
-    }
-
-    if (isMobile) return;
+    setTimeout(function () {
+      root.querySelectorAll('.char').forEach(function (c) {
+        c.style.transition = 'none';
+      });
+    }, 1500);
 
     var target = { mx: 0, my: 0 };
     var current = { mx: 0, my: 0 };

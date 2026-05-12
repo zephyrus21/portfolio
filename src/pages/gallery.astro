@@ -1,0 +1,200 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageChrome from '../components/PageChrome.astro';
+import Footer from '../components/Footer.astro';
+
+const photos = [
+  { id: '01', label: 'Film — 35mm', aspect: 'tall' },
+  { id: '02', label: 'Street · 2025', aspect: 'wide' },
+  { id: '03', label: 'Architecture', aspect: 'square' },
+  { id: '04', label: 'Portraits · 2024', aspect: 'tall' },
+  { id: '05', label: 'Travel · Japan', aspect: 'wide' },
+  { id: '06', label: 'Light & Shadow', aspect: 'square' },
+  { id: '07', label: 'Film — 35mm', aspect: 'wide' },
+  { id: '08', label: 'Street · 2024', aspect: 'tall' },
+  { id: '09', label: 'Golden Hour', aspect: 'square' },
+  { id: '10', label: 'Urban · NYC', aspect: 'wide' },
+  { id: '11', label: 'Minimal', aspect: 'tall' },
+  { id: '12', label: 'Nature · 2025', aspect: 'square' },
+];
+---
+
+<Layout title="Gallery — Piyush Pandey">
+  <PageChrome active="gallery" />
+
+  <main class="page-main">
+    <section class="page-hero">
+      <div class="eyebrow reveal"><span class="num">02</span><span class="bar"></span><span>Gallery</span></div>
+      <h1 class="h-display reveal" style="margin-top: 28px;">
+        Through the <em>lens</em>.
+      </h1>
+      <p class="page-hero-sub reveal">
+        A collection of photographs — film, street, and everything in between.
+      </p>
+    </section>
+
+    <section class="gallery-section">
+      <div class="gallery-grid">
+        {photos.map((photo, i) => (
+          <div class={`gallery-item gallery-item--${photo.aspect} reveal`} style={`--gd: ${i * 60}ms`}>
+            <div class="gallery-img">
+              <div class="gallery-placeholder">
+                <span class="gallery-id">{photo.id}</span>
+              </div>
+              <div class="gallery-overlay">
+                <span class="gallery-label">{photo.label}</span>
+                <span class="gallery-arrow">↗</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-main {
+    padding-top: 80px;
+  }
+
+  .page-hero {
+    padding: var(--pad-y) var(--gutter);
+    border-top: 0;
+    max-width: 900px;
+  }
+
+  .page-hero-sub {
+    margin-top: 28px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(18px, 2vw, 24px);
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .gallery-section {
+    padding: 0 var(--gutter) var(--pad-y);
+    border-top: 1px solid var(--rule);
+    padding-top: 56px;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .gallery-item {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .gallery-item--tall  { grid-row: span 2; }
+  .gallery-item--wide  { grid-column: span 2; }
+  .gallery-item--square { grid-row: span 1; grid-column: span 1; }
+
+  .gallery-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    overflow: hidden;
+  }
+
+  .gallery-item--tall .gallery-img  { min-height: 560px; }
+  .gallery-item--wide .gallery-img  { min-height: 320px; }
+
+  .gallery-placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        rgba(20, 17, 13, 0.055) 0 1px,
+        transparent 1px 18px
+      ),
+      linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 700ms cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .gallery-item:hover .gallery-placeholder {
+    transform: scale(1.04);
+  }
+
+  .gallery-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.4;
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    background: linear-gradient(to top, rgba(20,17,13,0.32) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 400ms ease;
+  }
+
+  body.theme-dark .gallery-overlay,
+  body.theme-catppuccin .gallery-overlay,
+  body.theme-nord .gallery-overlay,
+  body.theme-gruvbox .gallery-overlay,
+  body.theme-rose-pine .gallery-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%);
+  }
+
+  .gallery-item:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .gallery-arrow {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: #fff;
+    transform: translate(-4px, 4px);
+    transition: transform 400ms cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .gallery-item:hover .gallery-arrow {
+    transform: translate(0, 0);
+  }
+
+  @media (max-width: 800px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .gallery-item--wide { grid-column: span 2; }
+    .gallery-item--tall { grid-row: span 1; min-height: auto; }
+    .gallery-item--tall .gallery-img { min-height: 280px; }
+  }
+
+  @media (max-width: 500px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+    .gallery-item--wide,
+    .gallery-item--tall { grid-column: span 1; grid-row: span 1; }
+  }
+</style>

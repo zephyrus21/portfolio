@@ -386,14 +386,31 @@ section.in-view .eyebrow .bar {
   transform: translateY(0);
 }
 
+/* Landing: hero + ticker pinned to exactly one viewport */
+.landing-wrap {
+  height: 100svh;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Hero */
 .hero {
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: var(--pad-y) var(--gutter);
+  padding-top: calc(var(--pad-y) + 76px);
   border-top: 0;
+  position: relative;
+}
+
+.hero-label {
+  position: absolute;
+  left: var(--gutter);
+  top: calc(76px + 28px);
 }
 
 .hero .lockup {
@@ -407,7 +424,7 @@ section.in-view .eyebrow .bar {
   line-height: 0.86;
   letter-spacing: -0.03em;
   font-weight: 400;
-  font-size: clamp(72px, 16vw, 240px);
+  font-size: clamp(64px, 11vw, 160px);
   user-select: none;
   pointer-events: auto;
   perspective: 1400px;
@@ -416,8 +433,7 @@ section.in-view .eyebrow .bar {
 }
 
 .hero-name .word {
-  display: inline-flex;
-  margin-right: 0.18em;
+  display: block;
   position: relative;
   padding: 0.06em 0 0.04em;
   transform-style: preserve-3d;
@@ -482,6 +498,22 @@ section.in-view .eyebrow .bar {
   .hero-meta .role,
   .hero-meta .blurb {
     grid-column: 1 / -1;
+  }
+}
+
+@media (pointer: coarse) {
+  /* Plain text rendering — no 3D split */
+  .hero-name {
+    perspective: none;
+  }
+  .hero-name .word {
+    display: block;
+    transform: none;
+    transform-style: flat;
+    transition: none;
+  }
+  .hero-name .word em {
+    font-style: italic;
   }
 }
 

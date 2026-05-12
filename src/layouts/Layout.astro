@@ -1,0 +1,186 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Apply theme before paint to avoid flash -->
+    <script is:inline>
+      (function () {
+        var d = { theme: 'warm', heroMotion: 'still', customCursor: false, density: 'airy', typePair: 'all-mono' };
+        window.__TWEAK_DEFAULTS__ = d;
+        var ALL_THEMES = ['theme-warm','theme-dark','theme-mono','theme-cool',
+          'theme-catppuccin','theme-latte','theme-nord','theme-gruvbox','theme-rose-pine'];
+        function applyTweaks(t) {
+          var b = document.documentElement;
+          ALL_THEMES.forEach(function(c){ b.classList.remove(c); });
+          b.classList.add('theme-' + (t.theme || 'warm'));
+        }
+        applyTweaks(d);
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <slot />
+
+    <script is:inline>
+      /* Tweak defaults & applyTweaks (full version) */
+      window.__TWEAK_DEFAULTS__ = {
+        theme: 'warm',
+        heroMotion: 'still',
+        customCursor: false,
+        density: 'airy',
+        typePair: 'all-mono'
+      };
+
+      var ALL_THEMES = ['theme-warm','theme-dark','theme-mono','theme-cool',
+        'theme-catppuccin','theme-latte','theme-nord','theme-gruvbox','theme-rose-pine'];
+
+      function applyTweaks(t) {
+        var body = document.body;
+        var theme = t.theme || 'warm';
+        ALL_THEMES.forEach(function(c){ body.classList.remove(c); });
+        body.classList.add('theme-' + theme);
+        body.classList.toggle('no-custom-cursor', !t.customCursor);
+        /* sync picker trigger + active option */
+        var THEME_META = {
+          'warm': { name: 'Warm', color: '#f3efe7' },
+          'dark': { name: 'Ink', color: '#0d0c0b' },
+          'mono': { name: 'Mono', color: '#fafafa' },
+          'cool': { name: 'Cool', color: '#eef0f2' },
+          'catppuccin': { name: 'Catppuccin', color: '#1e1e2e' },
+          'latte': { name: 'Latte', color: '#eff1f5' },
+          'nord': { name: 'Nord', color: '#2e3440' },
+          'gruvbox': { name: 'Gruvbox', color: '#282828' },
+          'rose-pine': { name: 'Rosé Pine', color: '#191724' }
+        };
+        var meta = THEME_META[theme] || THEME_META['warm'];
+        var dotEl = document.getElementById('tpActiveDot');
+        var nameEl = document.getElementById('tpActiveName');
+        if (dotEl) dotEl.style.setProperty('--tw', meta.color);
+        if (nameEl) nameEl.textContent = meta.name;
+        document.querySelectorAll('.tp-option').forEach(function(o) {
+          o.classList.toggle('active', o.dataset.theme === theme);
+          o.setAttribute('aria-selected', o.dataset.theme === theme ? 'true' : 'false');
+        });
+        document.documentElement.style.setProperty('--pad-y',
+          t.density === 'tight' ? 'clamp(32px,6vh,72px)' :
+          t.density === 'airy'  ? 'clamp(72px,14vh,180px)' :
+                                   'clamp(48px,10vh,120px)'
+        );
+        var r = document.documentElement.style;
+        if (t.typePair === 'serif-sans') {
+          r.setProperty('--serif', '"Instrument Serif", "Newsreader", Georgia, serif');
+          r.setProperty('--sans',  '"Geist", ui-sans-serif, system-ui, sans-serif');
+        } else if (t.typePair === 'serif-mono') {
+          r.setProperty('--serif', '"Newsreader", "Instrument Serif", Georgia, serif');
+          r.setProperty('--sans',  '"JetBrains Mono", ui-monospace, monospace');
+        } else if (t.typePair === 'all-serif') {
+          r.setProperty('--serif', '"Instrument Serif", Georgia, serif');
+          r.setProperty('--sans',  '"Newsreader", Georgia, serif');
+        } else if (t.typePair === 'all-mono') {
+          r.setProperty('--serif', '"JetBrains Mono", ui-monospace, monospace');
+          r.setProperty('--sans',  '"JetBrains Mono", ui-monospace, monospace');
+        }
+        window.__heroMotion = t.heroMotion;
+      }
+      applyTweaks(window.__TWEAK_DEFAULTS__);
+      window.__applyTweaks = applyTweaks;
+
+      /* Custom cursor */
+      (function () {
+        var c = document.getElementById('cursor');
+        var x = 0, y = 0, tx = 0, ty = 0;
+        window.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; });
+        function loop() {
+          x += (tx - x) * 0.22; y += (ty - y) * 0.22;
+          c.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
+          requestAnimationFrame(loop);
+        }
+        loop();
+        document.querySelectorAll('a, .work-row, [data-cursor="ring"]').forEach(function (el) {
+          el.addEventListener('pointerenter', function () { c.classList.add('ring'); });
+          el.addEventListener('pointerleave', function () { c.classList.remove('ring'); });
+        });
+      })();
+
+      /* Magnetic hover */
+      (function () {
+        document.querySelectorAll('[data-magnetic]').forEach(function (el) {
+          el.style.transition = 'transform 500ms cubic-bezier(.2,.7,.2,1)';
+          el.addEventListener('pointermove', function (e) {
+            var r = el.getBoundingClientRect();
+            var dx = e.clientX - (r.left + r.width / 2);
+            var dy = e.clientY - (r.top + r.height / 2);
+            el.style.transform = 'translate(' + (dx * 0.18) + 'px, ' + (dy * 0.28) + 'px)';
+          });
+          el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+        });
+      })();
+
+      /* Scroll reveal */
+      (function () {
+        document.querySelectorAll('.reveal-line').forEach(function (el, i) {
+          el.style.setProperty('--rd', (i * 80) + 'ms');
+        });
+        document.querySelectorAll('.about-facts li').forEach(function (el, i) {
+          el.style.setProperty('--fd', (i * 90) + 'ms');
+        });
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) {
+              en.target.classList.add('in');
+              io.unobserve(en.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.reveal, .reveal-line, .exp-row, .writing-row, .about-facts')
+          .forEach(function (el) { io.observe(el); });
+      })();
+
+      /* Scroll progress */
+      (function () {
+        var bar = document.getElementById('scrollProgress');
+        function update() {
+          var doc = document.documentElement;
+          var max = doc.scrollHeight - window.innerHeight;
+          var p = max > 0 ? (window.scrollY / max) * 100 : 0;
+          bar.style.setProperty('--p', p + '%');
+        }
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+      })();
+
+      /* Tweak message listener */
+      window.addEventListener('message', function (e) {
+        var d = e.data || {};
+        if (d.type === '__edit_mode_state' && d.state) applyTweaks(d.state);
+      });
+    </script>
+  </body>
+</html>

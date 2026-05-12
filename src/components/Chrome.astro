@@ -1,0 +1,188 @@
+---
+---
+
+<header class="chrome">
+  <div class="mark">
+    <span class="dot"></span><span class="mark-text" data-scramble>PIYUSH PANDEY · SWE · IDX/01</span>
+  </div>
+  <nav>
+    <a href="#about" data-magnetic data-nav>
+      <span class="nav-num">01</span><span class="nav-label" data-text="About">About</span>
+    </a>
+    <a href="#work" data-magnetic data-nav>
+      <span class="nav-num">02</span><span class="nav-label" data-text="Work">Work</span>
+    </a>
+    <a href="#experience" data-magnetic data-nav>
+      <span class="nav-num">03</span><span class="nav-label" data-text="Experience">Experience</span>
+    </a>
+    <a href="#writing" data-magnetic data-nav>
+      <span class="nav-num">04</span><span class="nav-label" data-text="Writing">Writing</span>
+    </a>
+    <a href="#contact" data-magnetic data-nav>
+      <span class="nav-num">05</span><span class="nav-label" data-text="Contact">Contact</span>
+    </a>
+  </nav>
+  <div class="chrome-right">
+
+    <div class="theme-picker" id="themePicker">
+      <button class="tp-trigger" id="themePickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose theme">
+        <span class="tp-dot" id="tpActiveDot" style="--tw:#f3efe7"></span>
+        <span class="tp-name" id="tpActiveName">Warm</span>
+        <svg class="tp-caret" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+          <path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="tp-panel" id="themePanel" role="listbox" aria-label="Theme" aria-hidden="true">
+        <div class="tp-panel-inner">
+          <button class="tp-option active" role="option" data-theme="warm"       data-name="Warm"       data-color="#f3efe7" aria-selected="true" ><span class="tp-dot" style="--tw:#f3efe7"></span>Warm</button>
+          <button class="tp-option"        role="option" data-theme="dark"       data-name="Ink"        data-color="#0d0c0b" aria-selected="false"><span class="tp-dot" style="--tw:#0d0c0b"></span>Ink</button>
+          <button class="tp-option"        role="option" data-theme="mono"       data-name="Mono"       data-color="#fafafa" aria-selected="false"><span class="tp-dot" style="--tw:#fafafa"></span>Mono</button>
+          <button class="tp-option"        role="option" data-theme="cool"       data-name="Cool"       data-color="#eef0f2" aria-selected="false"><span class="tp-dot" style="--tw:#eef0f2"></span>Cool</button>
+          <div class="tp-divider"></div>
+          <button class="tp-option"        role="option" data-theme="catppuccin" data-name="Catppuccin" data-color="#1e1e2e" aria-selected="false"><span class="tp-dot" style="--tw:#1e1e2e"></span>Catppuccin</button>
+          <button class="tp-option"        role="option" data-theme="latte"      data-name="Latte"      data-color="#eff1f5" aria-selected="false"><span class="tp-dot" style="--tw:#eff1f5"></span>Latte</button>
+          <button class="tp-option"        role="option" data-theme="nord"       data-name="Nord"       data-color="#2e3440" aria-selected="false"><span class="tp-dot" style="--tw:#2e3440"></span>Nord</button>
+          <button class="tp-option"        role="option" data-theme="gruvbox"    data-name="Gruvbox"    data-color="#282828" aria-selected="false"><span class="tp-dot" style="--tw:#282828"></span>Gruvbox</button>
+          <button class="tp-option"        role="option" data-theme="rose-pine"  data-name="Rosé Pine"  data-color="#191724" aria-selected="false"><span class="tp-dot" style="--tw:#191724"></span>Rosé Pine</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="status"><span class="live"></span>AVAILABLE</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+</header>
+
+<!-- Backdrop for mobile bottom sheet -->
+<div class="tp-backdrop" id="themeBackdrop" aria-hidden="true"></div>
+
+<nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <a href="#about" style="--nd:60ms"><span class="mn-num">01</span>About</a>
+  <a href="#work" style="--nd:120ms"><span class="mn-num">02</span>Work</a>
+  <a href="#experience" style="--nd:180ms"><span class="mn-num">03</span>Experience</a>
+  <a href="#writing" style="--nd:240ms"><span class="mn-num">04</span>Writing</a>
+  <a href="#contact" style="--nd:300ms"><span class="mn-num">05</span>Contact</a>
+</nav>
+
+<script is:inline>
+  /* ── Theme picker ── */
+  (function () {
+    var picker   = document.getElementById('themePicker');
+    var btn      = document.getElementById('themePickerBtn');
+    var panel    = document.getElementById('themePanel');
+    var backdrop = document.getElementById('themeBackdrop');
+    var dotEl    = document.getElementById('tpActiveDot');
+    var nameEl   = document.getElementById('tpActiveName');
+    if (!picker || !btn || !panel) return;
+
+    function openPicker() {
+      picker.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      panel.setAttribute('aria-hidden', 'false');
+      if (backdrop) backdrop.classList.add('show');
+    }
+
+    function closePicker() {
+      picker.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('aria-hidden', 'true');
+      if (backdrop) backdrop.classList.remove('show');
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      picker.classList.contains('open') ? closePicker() : openPicker();
+    });
+
+    panel.querySelectorAll('.tp-option').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        var theme = opt.dataset.theme;
+        var name  = opt.dataset.name;
+        var color = opt.dataset.color;
+
+        dotEl.style.setProperty('--tw', color);
+        nameEl.textContent = name;
+
+        panel.querySelectorAll('.tp-option').forEach(function (o) {
+          o.classList.toggle('active', o === opt);
+          o.setAttribute('aria-selected', o === opt ? 'true' : 'false');
+        });
+
+        var newState = Object.assign({}, window.__TWEAK_DEFAULTS__, { theme: theme });
+        window.__TWEAK_DEFAULTS__ = newState;
+        window.__applyTweaks(newState);
+        closePicker();
+        try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { theme: theme } }, '*'); } catch (e) {}
+      });
+    });
+
+    if (backdrop) backdrop.addEventListener('click', closePicker);
+    document.addEventListener('click', function (e) {
+      if (!picker.contains(e.target)) closePicker();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePicker();
+    });
+  })();
+
+  /* ── Scramble text ── */
+  (function () {
+    var el = document.querySelector('[data-scramble]');
+    if (!el) return;
+    var final = el.textContent;
+    var chars = '!<>-_\\/[]{}=+*^?#____PIYUSH';
+    var frame = 0, raf = null;
+    function scrambleTo(target) {
+      var queue = [];
+      for (var i = 0; i < target.length; i++) {
+        var start = Math.floor(Math.random() * 20);
+        queue.push({ from: el.textContent[i] || '', to: target[i], start: start, end: start + Math.floor(Math.random() * 20) + 8, ch: '' });
+      }
+      frame = 0;
+      cancelAnimationFrame(raf);
+      function update() {
+        var out = '', done = 0;
+        for (var q of queue) {
+          if (frame >= q.end) { out += q.to; done++; }
+          else if (frame >= q.start) {
+            if (!q.ch || Math.random() < 0.28) q.ch = chars[Math.floor(Math.random() * chars.length)];
+            out += q.ch;
+          } else out += q.from;
+        }
+        el.textContent = out;
+        if (done < queue.length) { frame++; raf = requestAnimationFrame(update); }
+      }
+      update();
+    }
+    el.textContent = '';
+    setTimeout(function () { scrambleTo(final); }, 700);
+    el.addEventListener('pointerenter', function () { scrambleTo(final); });
+  })();
+
+  /* ── Mobile nav toggle ── */
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var nav    = document.getElementById('mobileNav');
+    if (!toggle || !nav) return;
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+      nav.setAttribute('aria-hidden', !open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    nav.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        nav.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        nav.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      });
+    });
+  })();
+</script>

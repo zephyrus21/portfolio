@@ -1,0 +1,32 @@
+---
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="track" id="ticker"></div>
+  <div class="track track-rev" id="tickerRev"></div>
+</div>
+
+<script is:inline>
+  (function () {
+    var t = document.getElementById('ticker');
+    var tr = document.getElementById('tickerRev');
+    var items = ['Software Engineer', 'Mable.ai', '·', 'Event Pipelines', '100M+ / day', '·', 'Open to chats', 'MMXXVI', '·'];
+    var html = items.map(function (s) {
+      return s === '·'
+        ? '<span class="dot"></span>'
+        : '<span>' + (s.includes(' ') ? s.replace(/(\w+)$/, '<em>$1</em>') : '<em>' + s + '</em>') + '</span>';
+    }).join('');
+    var filled = html + html + html + html;
+    if (t) t.innerHTML = filled;
+
+    if (tr) {
+      var items2 = ['Go', 'Rust', '·', 'GCP Pub/Sub', 'Kafka', 'Postgres', '·', 'Observability', '·'];
+      var html2 = items2.map(function (s) {
+        return s === '·'
+          ? '<span class="dot"></span>'
+          : '<span>' + (s.includes(' ') ? s.replace(/(\w+)$/, '<em>$1</em>') : '<em>' + s + '</em>') + '</span>';
+      }).join('');
+      tr.innerHTML = html2 + html2 + html2 + html2;
+    }
+  })();
+</script>

@@ -1,0 +1,112 @@
+---
+---
+
+<section class="hero" id="top">
+  <div class="lockup">
+    <div class="eyebrow reveal">
+      <span class="num">01</span><span class="bar"></span><span>Portfolio · MMXXVI</span>
+    </div>
+
+    <h1 class="hero-name" id="heroName" aria-label="Piyush Pandey">
+      <span class="word" data-word="Piyush"></span>
+      <span class="word" data-word="Pandey" data-italic="true"></span>
+    </h1>
+
+    <div class="hero-meta">
+      <div class="role reveal-line">
+        <span>Software Engineer — building event pipelines &amp; quiet backends.</span>
+      </div>
+      <div class="blurb reveal-line">
+        <span>Currently at <em>Mable.ai</em>, shipping Go microservices that move 100M+
+          events a day. I like distributed systems, observability, and writing code the next engineer can read.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <span class="cursor-hint"><span class="live-ink"></span>&nbsp;Move cursor · letters respond</span>
+    <span class="scroll-cue">Scroll <span class="line"></span></span>
+  </div>
+</section>
+
+<script is:inline>
+  (function heroMotion() {
+    var root = document.getElementById('heroName');
+    var words = root.querySelectorAll('.word');
+    var globalIdx = 0;
+    words.forEach(function (w) {
+      var txt = w.dataset.word;
+      var italic = w.dataset.italic === 'true';
+      var len = txt.length;
+      w.innerHTML = '';
+      for (var i = 0; i < len; i++) {
+        var s = document.createElement('span');
+        s.className = 'char entering' + (italic ? ' italic' : '');
+        s.textContent = txt[i];
+        var mid = (len - 1) / 2;
+        var offset = (i - mid) / mid;
+        s.style.setProperty('--cw', (offset * 28).toFixed(1));
+        s.style.setProperty('--ch', (Math.abs(offset) * 14).toFixed(1));
+        s.style.setProperty('--cd', (260 + globalIdx * 55) + 'ms');
+        w.appendChild(s);
+        globalIdx++;
+      }
+    });
+
+    requestAnimationFrame(function () {
+      root.querySelectorAll('.char').forEach(function (c) {
+        c.classList.remove('entering');
+        c.classList.add('entered');
+      });
+    });
+
+    setTimeout(function () {
+      root.querySelectorAll('.char').forEach(function (c) {
+        c.style.transition = 'none';
+      });
+    }, 1500);
+
+    var target = { mx: 0, my: 0 };
+    var current = { mx: 0, my: 0 };
+
+    function onMove(e) {
+      var r = root.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width;
+      var y = (e.clientY - r.top) / r.height;
+      target.mx = Math.max(-1, Math.min(1, (x - 0.5) * 2));
+      target.my = Math.max(-1, Math.min(1, (y - 0.5) * 2));
+    }
+    function onLeave() { target.mx = 0; target.my = 0; }
+
+    window.addEventListener('pointermove', onMove);
+    root.addEventListener('pointerleave', onLeave);
+
+    function loop() {
+      current.mx += (target.mx - current.mx) * 0.08;
+      current.my += (target.my - current.my) * 0.08;
+      var mode = window.__heroMotion || 'weight';
+      var mx = current.mx, my = current.my;
+      if (mode === 'repel') { mx *= -1; my *= -1; }
+      if (mode === 'skew')  { mx *= 1.2; my *= 0.6; }
+      if (mode === 'still') { mx = 0; my = 0; }
+
+      root.style.setProperty('--mx', mx.toFixed(3));
+      root.style.setProperty('--my', my.toFixed(3));
+
+      var chars = root.querySelectorAll('.char');
+      var r = root.getBoundingClientRect();
+      var localX = (current.mx + 1) * 0.5 * r.width + r.left;
+      var localY = (current.my + 1) * 0.5 * r.height + r.top;
+      chars.forEach(function (c) {
+        var cr = c.getBoundingClientRect();
+        var dx = (cr.left + cr.width / 2) - localX;
+        var dy = (cr.top + cr.height / 2) - localY;
+        var d = Math.hypot(dx, dy);
+        c.style.setProperty('--prox', Math.max(0, 1 - d / 240).toFixed(3));
+      });
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>

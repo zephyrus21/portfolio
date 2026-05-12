@@ -1,0 +1,80 @@
+---
+---
+
+<section id="work">
+  <div class="eyebrow reveal"><span class="num">03</span><span class="bar"></span><span>Selected Work</span></div>
+  <h2 class="h-section reveal" style="margin-top: 28px;">Things I've <em>built</em>.</h2>
+
+  <div class="work-list" id="workList">
+    <a class="work-row" data-preview="01" href="#">
+      <span class="idx">01 / 06</span>
+      <span class="name">Event Pipeline</span>
+      <span class="desc">Go microservices moving 100M+ ad-tech events a day at Mable.ai.</span>
+      <span class="year">2024 →</span>
+    </a>
+    <a class="work-row" data-preview="02" href="#">
+      <span class="idx">02 / 06</span>
+      <span class="name">Ad Platform Integrations</span>
+      <span class="desc">Meta, Google Ads &amp; Pinterest — event capture, tracking, attribution.</span>
+      <span class="year">2024</span>
+    </a>
+    <a class="work-row" data-preview="03" href="#">
+      <span class="idx">03 / 06</span>
+      <span class="name">Shopify Bridge</span>
+      <span class="desc">Captures e-commerce events into internal analytics &amp; ad pipelines.</span>
+      <span class="year">2024</span>
+    </a>
+    <a class="work-row" data-preview="04" href="#">
+      <span class="idx">04 / 06</span>
+      <span class="name">TS → Go Rewrite</span>
+      <span class="desc">Migrated legacy TypeScript services to Go for throughput &amp; sanity.</span>
+      <span class="year">2023</span>
+    </a>
+    <a class="work-row" data-preview="05" href="#">
+      <span class="idx">05 / 06</span>
+      <span class="name">UIDAI Telemetry</span>
+      <span class="desc">gRPC + Prometheus service streaming 250k telemetry events / day.</span>
+      <span class="year">2023</span>
+    </a>
+    <a class="work-row" data-preview="06" href="#">
+      <span class="idx">06 / 06</span>
+      <span class="name">Anatomy Mapper</span>
+      <span class="desc">Real-time anatomy teaching app at Omikron — shipped in 30+ languages.</span>
+      <span class="year">2022</span>
+    </a>
+  </div>
+</section>
+
+<div class="work-preview" id="workPreview" aria-hidden="true">
+  <div class="pv" data-pv="01"><div class="placeholder"><span>events</span><span>100M/d</span></div></div>
+  <div class="pv" data-pv="02"><div class="placeholder"><span>meta · google · pin</span><span>ads</span></div></div>
+  <div class="pv" data-pv="03"><div class="placeholder"><span>shopify</span><span>e-com</span></div></div>
+  <div class="pv" data-pv="04"><div class="placeholder"><span>ts → go</span><span>rewrite</span></div></div>
+  <div class="pv" data-pv="05"><div class="placeholder"><span>uidai</span><span>250k/d</span></div></div>
+  <div class="pv" data-pv="06"><div class="placeholder"><span>anatomy mapper</span><span>30+ langs</span></div></div>
+</div>
+
+<script is:inline>
+  (function () {
+    var preview = document.getElementById('workPreview');
+    var rows = document.querySelectorAll('.work-row');
+    var pvs = preview.querySelectorAll('.pv');
+    rows.forEach(function (row) {
+      row.addEventListener('pointerenter', function () {
+        var id = row.dataset.preview;
+        pvs.forEach(function (p) { p.classList.toggle('active', p.dataset.pv === id); });
+        preview.classList.add('show');
+        row.classList.add('active');
+      });
+      row.addEventListener('pointerleave', function () {
+        preview.classList.remove('show');
+        row.classList.remove('active');
+      });
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!preview.classList.contains('show')) return;
+      preview.style.left = (e.clientX + 80) + 'px';
+      preview.style.top = e.clientY + 'px';
+    });
+  })();
+</script>

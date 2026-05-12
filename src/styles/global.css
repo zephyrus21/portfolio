@@ -1648,4 +1648,48 @@ body.theme-rose-pine .tp-panel-inner {
   .hero-bottom .cursor-hint {
     display: none;
   }
+
+  /* Fix overlapping on short/mobile screens */
+  .landing-wrap {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero {
+    justify-content: flex-start;
+    padding-bottom: 80px;
+  }
+
+  .hero-bottom {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin-top: 40px;
+  }
+}
+
+/* Short landscape viewports — scale name down so content fits */
+@media (max-height: 600px) {
+  .hero-name {
+    font-size: clamp(48px, 9vw, 100px);
+  }
+
+  .landing-wrap {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero {
+    justify-content: flex-start;
+    padding-bottom: 60px;
+  }
+
+  .hero-bottom {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin-top: 28px;
+  }
 }

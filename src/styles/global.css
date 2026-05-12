@@ -1231,6 +1231,80 @@ body.theme-rose-pine {
   --accent: #c4a7e7;
 }
 
+/* Light themes */
+body.theme-latte {
+  --bg: #eff1f5;
+  --bg-2: #e6e9ef;
+  --ink: #4c4f69;
+  --ink-soft: #7c7f93;
+  --rule: rgba(76, 79, 105, 0.13);
+  --accent: #8839ef;
+}
+
+body.theme-parchment {
+  --bg: #f5f0e8;
+  --bg-2: #ede6d6;
+  --ink: #2c2416;
+  --ink-soft: #6b5c45;
+  --rule: rgba(44, 36, 22, 0.13);
+  --accent: #8b4513;
+}
+
+body.theme-forest {
+  --bg: #f0f4ee;
+  --bg-2: #e3ebe0;
+  --ink: #1a2e1a;
+  --ink-soft: #4a6741;
+  --rule: rgba(26, 46, 26, 0.13);
+  --accent: #2d6a2d;
+}
+
+body.theme-lavender {
+  --bg: #f4f0fa;
+  --bg-2: #ebe4f5;
+  --ink: #2a1f3d;
+  --ink-soft: #6b5a8a;
+  --rule: rgba(42, 31, 61, 0.13);
+  --accent: #7c3aed;
+}
+
+/* Dark themes */
+body.theme-dracula {
+  --bg: #282a36;
+  --bg-2: #343746;
+  --ink: #f8f8f2;
+  --ink-soft: #9096a2;
+  --rule: rgba(248, 248, 242, 0.1);
+  --accent: #ff79c6;
+}
+
+body.theme-monokai {
+  --bg: #272822;
+  --bg-2: #3e3d32;
+  --ink: #f8f8f2;
+  --ink-soft: #90908a;
+  --rule: rgba(248, 248, 242, 0.1);
+  --accent: #a6e22e;
+}
+
+body.theme-tokyo {
+  --bg: #1a1b26;
+  --bg-2: #24283b;
+  --ink: #c0caf5;
+  --ink-soft: #737aa2;
+  --rule: rgba(192, 202, 245, 0.1);
+  --accent: #7aa2f7;
+}
+
+body.theme-solarized {
+  --bg: #002b36;
+  --bg-2: #073642;
+  --ink: #839496;
+  --ink-soft: #586e75;
+  --rule: rgba(131, 148, 150, 0.15);
+  --accent: #268bd2;
+}
+
 /* ── Theme picker ── */
 .theme-picker {
   position: relative;
@@ -1314,7 +1388,11 @@ body.theme-dark .tp-panel-inner,
 body.theme-catppuccin .tp-panel-inner,
 body.theme-nord .tp-panel-inner,
 body.theme-gruvbox .tp-panel-inner,
-body.theme-rose-pine .tp-panel-inner {
+body.theme-rose-pine .tp-panel-inner,
+body.theme-dracula .tp-panel-inner,
+body.theme-monokai .tp-panel-inner,
+body.theme-tokyo .tp-panel-inner,
+body.theme-solarized .tp-panel-inner {
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.44), 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -1322,6 +1400,15 @@ body.theme-rose-pine .tp-panel-inner {
   height: 1px;
   background: var(--rule);
   margin: 4px 6px;
+}
+
+.tp-section-label {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 6px 10px 2px;
+  opacity: 0.6;
 }
 
 .tp-option {
@@ -1459,7 +1546,11 @@ body.theme-rose-pine .tp-panel-inner {
   body.theme-catppuccin .tp-fab-panel,
   body.theme-nord .tp-fab-panel,
   body.theme-gruvbox .tp-fab-panel,
-  body.theme-rose-pine .tp-fab-panel {
+  body.theme-rose-pine .tp-fab-panel,
+  body.theme-dracula .tp-fab-panel,
+  body.theme-monokai .tp-fab-panel,
+  body.theme-tokyo .tp-fab-panel,
+  body.theme-solarized .tp-fab-panel {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.44);
   }
 

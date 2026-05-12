@@ -32,3 +32,29 @@ Single-page Astro portfolio. No framework integrations — all interactivity is 
 **Script globals:** `window.__TWEAK_DEFAULTS__`, `window.__applyTweaks`, `window.__heroMotion` — set in Layout, consumed by Chrome and Hero. Use `is:inline` (not bundled modules) to preserve execution order and these globals.
 
 **`index.html` at root** — legacy single-file version kept as reference; the Astro build output in `dist/` is the canonical artifact.
+
+## Additional Pages
+
+- `src/pages/blog.astro` — blog listing, fetches published posts from Notion
+- `src/pages/blog/[slug].astro` — individual post page, renders Notion blocks to HTML
+- `src/pages/gallery.astro` — photography gallery in a masonry layout
+
+## Data Layer
+
+**`src/lib/notion.ts`** — all Notion API calls live here. Uses `@notionhq/client`, `notion-to-md`, and `marked`.
+
+- `getPublishedPosts()` — queries the blog database (filter: Status = Published, sort by Date desc)
+- `getPostBySlug(slug)` — fetches a single post and converts its blocks to HTML
+- `getGalleryPhotos()` — queries the gallery database (filter: Status = Published, sort by Order asc)
+
+**Environment variables required:**
+
+```env
+NOTION_TOKEN
+NOTION_DATABASE_ID
+NOTION_GALLERY_DATABASE_ID
+```
+
+## Deployment
+
+Vercel SSR via `@astrojs/vercel` adapter (`output: 'server'` in `astro.config.mjs`). No static export.

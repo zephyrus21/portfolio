@@ -23,10 +23,17 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
     <!-- Apply theme before paint to avoid flash -->
     <script is:inline>
       (function () {
-        var d = { theme: 'warm', heroMotion: 'weight', customCursor: true, density: 'airy', typePair: 'all-mono' };
+        var saved;
+        try { saved = JSON.parse(localStorage.getItem('__tweaks__') || 'null'); } catch (e) {}
+        var d = Object.assign(
+          { theme: 'warm', heroMotion: 'weight', customCursor: true, density: 'airy', typePair: 'all-mono' },
+          saved || {}
+        );
         window.__TWEAK_DEFAULTS__ = d;
-        var ALL_THEMES = ['theme-warm','theme-dark','theme-cool',
-          'theme-catppuccin','theme-nord','theme-gruvbox','theme-rose-pine'];
+        var ALL_THEMES = ['theme-warm','theme-dark','theme-cool','theme-mono',
+          'theme-catppuccin','theme-nord','theme-gruvbox','theme-rose-pine',
+          'theme-latte','theme-parchment','theme-forest','theme-lavender',
+          'theme-dracula','theme-monokai','theme-tokyo','theme-solarized'];
         function applyTweaks(t) {
           var b = document.documentElement;
           ALL_THEMES.forEach(function(c){ b.classList.remove(c); });
@@ -50,16 +57,18 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
 
     <script is:inline>
       /* Tweak defaults & applyTweaks (full version) */
-      window.__TWEAK_DEFAULTS__ = {
-        theme: 'warm',
-        heroMotion: 'weight',
-        customCursor: true,
-        density: 'airy',
-        typePair: 'all-mono'
-      };
+      (function () {
+        var saved; try { saved = JSON.parse(localStorage.getItem('__tweaks__') || 'null'); } catch (e) {}
+        window.__TWEAK_DEFAULTS__ = Object.assign(
+          { theme: 'warm', heroMotion: 'weight', customCursor: true, density: 'airy', typePair: 'all-mono' },
+          saved || {}
+        );
+      })();
 
       var ALL_THEMES = ['theme-warm','theme-dark','theme-mono','theme-cool',
-        'theme-catppuccin','theme-latte','theme-nord','theme-gruvbox','theme-rose-pine'];
+        'theme-catppuccin','theme-latte','theme-nord','theme-gruvbox','theme-rose-pine',
+        'theme-parchment','theme-forest','theme-lavender',
+        'theme-dracula','theme-monokai','theme-tokyo','theme-solarized'];
 
       function applyTweaks(t) {
         var body = document.body;
@@ -75,7 +84,15 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
           'catppuccin': { name: 'Catppuccin', color: '#1e1e2e' },
           'nord': { name: 'Nord', color: '#2e3440' },
           'gruvbox': { name: 'Gruvbox', color: '#282828' },
-          'rose-pine': { name: 'Rosé Pine', color: '#191724' }
+          'rose-pine': { name: 'Rosé Pine', color: '#191724' },
+          'latte': { name: 'Latte', color: '#eff1f5' },
+          'parchment': { name: 'Parchment', color: '#f5f0e8' },
+          'forest': { name: 'Forest', color: '#f0f4ee' },
+          'lavender': { name: 'Lavender', color: '#f4f0fa' },
+          'dracula': { name: 'Dracula', color: '#282a36' },
+          'monokai': { name: 'Monokai', color: '#272822' },
+          'tokyo': { name: 'Tokyo Night', color: '#1a1b26' },
+          'solarized': { name: 'Solarized', color: '#002b36' }
         };
         var meta = THEME_META[theme] || THEME_META['warm'];
         var dotEl = document.getElementById('tpActiveDot');

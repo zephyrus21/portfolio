@@ -61,6 +61,26 @@
 <!-- Backdrop for mobile bottom sheet -->
 <div class="tp-backdrop" id="themeBackdrop" aria-hidden="true"></div>
 
+<div class="tp-fab" id="tpFab">
+  <button class="tp-fab-btn" id="tpFabBtn" aria-label="Choose theme" aria-expanded="false">
+    <span class="tp-fab-icon" aria-hidden="true">
+      <span style="background:#f3efe7"></span>
+      <span style="background:#0d0c0b"></span>
+      <span style="background:#eef0f2"></span>
+      <span style="background:#1e1e2e"></span>
+    </span>
+  </button>
+  <div class="tp-fab-panel" id="tpFabPanel" aria-hidden="true">
+    <button class="tp-fab-opt active" data-theme="warm"       data-name="Warm"       data-color="#f3efe7" aria-label="Warm"       style="--tw:#f3efe7"></button>
+    <button class="tp-fab-opt"        data-theme="dark"       data-name="Ink"        data-color="#0d0c0b" aria-label="Ink"        style="--tw:#0d0c0b"></button>
+    <button class="tp-fab-opt"        data-theme="cool"       data-name="Cool"       data-color="#eef0f2" aria-label="Cool"       style="--tw:#eef0f2"></button>
+    <button class="tp-fab-opt"        data-theme="catppuccin" data-name="Catppuccin" data-color="#1e1e2e" aria-label="Catppuccin" style="--tw:#1e1e2e"></button>
+    <button class="tp-fab-opt"        data-theme="nord"       data-name="Nord"       data-color="#2e3440" aria-label="Nord"       style="--tw:#2e3440"></button>
+    <button class="tp-fab-opt"        data-theme="gruvbox"    data-name="Gruvbox"    data-color="#282828" aria-label="Gruvbox"    style="--tw:#282828"></button>
+    <button class="tp-fab-opt"        data-theme="rose-pine"  data-name="Rosé Pine"  data-color="#191724" aria-label="Rosé Pine"  style="--tw:#191724"></button>
+  </div>
+</div>
+
 <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
   <a href="#about" style="--nd:60ms"><span class="mn-num">01</span>About</a>
   <a href="#work" style="--nd:120ms"><span class="mn-num">02</span>Work</a>
@@ -73,69 +93,94 @@
 <script is:inline>
   /* ── Theme picker ── */
   (function () {
-    var picker   = document.getElementById('themePicker');
-    var btn      = document.getElementById('themePickerBtn');
-    var panel    = document.getElementById('themePanel');
-    var backdrop = document.getElementById('themeBackdrop');
-    var dotEl    = document.getElementById('tpActiveDot');
-    var nameEl   = document.getElementById('tpActiveName');
-    if (!picker || !btn || !panel) return;
+    var picker    = document.getElementById('themePicker');
+    var btn       = document.getElementById('themePickerBtn');
+    var panel     = document.getElementById('themePanel');
+    var backdrop  = document.getElementById('themeBackdrop');
+    var dotEl     = document.getElementById('tpActiveDot');
+    var nameEl    = document.getElementById('tpActiveName');
+    var fab       = document.getElementById('tpFab');
+    var fabBtn    = document.getElementById('tpFabBtn');
+    var fabPanel  = document.getElementById('tpFabPanel');
 
+    function applyTheme(theme, name, color) {
+      if (dotEl)  dotEl.style.setProperty('--tw', color);
+      if (nameEl) nameEl.textContent = name;
+      if (panel) panel.querySelectorAll('.tp-option').forEach(function (o) {
+        o.classList.toggle('active', o.dataset.theme === theme);
+        o.setAttribute('aria-selected', o.dataset.theme === theme ? 'true' : 'false');
+      });
+      if (fabPanel) fabPanel.querySelectorAll('.tp-fab-opt').forEach(function (o) {
+        o.classList.toggle('active', o.dataset.theme === theme);
+      });
+      var newState = Object.assign({}, window.__TWEAK_DEFAULTS__, { theme: theme });
+      window.__TWEAK_DEFAULTS__ = newState;
+      window.__applyTweaks(newState);
+      try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { theme: theme } }, '*'); } catch (e) {}
+    }
+
+    /* Desktop picker */
     function openPicker() {
-      if (window.innerWidth > 700) {
-        var rect = btn.getBoundingClientRect();
-        panel.style.top = (rect.bottom + 10) + 'px';
-        panel.style.right = (window.innerWidth - rect.right) + 'px';
-      } else {
-        panel.style.top = '';
-        panel.style.right = '';
-      }
+      if (!picker || !btn || !panel) return;
+      var rect = btn.getBoundingClientRect();
+      panel.style.top   = (rect.bottom + 10) + 'px';
+      panel.style.right = (window.innerWidth - rect.right) + 'px';
       picker.classList.add('open');
       btn.setAttribute('aria-expanded', 'true');
       panel.setAttribute('aria-hidden', 'false');
       if (backdrop) backdrop.classList.add('show');
     }
-
     function closePicker() {
+      if (!picker) return;
       picker.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-      panel.setAttribute('aria-hidden', 'true');
+      if (btn)      btn.setAttribute('aria-expanded', 'false');
+      if (panel)    panel.setAttribute('aria-hidden', 'true');
       if (backdrop) backdrop.classList.remove('show');
     }
-
-    btn.addEventListener('click', function (e) {
+    if (btn) btn.addEventListener('click', function (e) {
       e.stopPropagation();
       picker.classList.contains('open') ? closePicker() : openPicker();
     });
-
-    panel.querySelectorAll('.tp-option').forEach(function (opt) {
+    if (panel) panel.querySelectorAll('.tp-option').forEach(function (opt) {
       opt.addEventListener('click', function () {
-        var theme = opt.dataset.theme;
-        var name  = opt.dataset.name;
-        var color = opt.dataset.color;
-
-        dotEl.style.setProperty('--tw', color);
-        nameEl.textContent = name;
-
-        panel.querySelectorAll('.tp-option').forEach(function (o) {
-          o.classList.toggle('active', o === opt);
-          o.setAttribute('aria-selected', o === opt ? 'true' : 'false');
-        });
-
-        var newState = Object.assign({}, window.__TWEAK_DEFAULTS__, { theme: theme });
-        window.__TWEAK_DEFAULTS__ = newState;
-        window.__applyTweaks(newState);
+        applyTheme(opt.dataset.theme, opt.dataset.name, opt.dataset.color);
         closePicker();
-        try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { theme: theme } }, '*'); } catch (e) {}
       });
     });
 
-    if (backdrop) backdrop.addEventListener('click', closePicker);
+    /* Mobile FAB */
+    function openFab() {
+      if (!fab) return;
+      fab.classList.add('open');
+      if (fabBtn)   fabBtn.setAttribute('aria-expanded', 'true');
+      if (fabPanel) fabPanel.setAttribute('aria-hidden', 'false');
+      if (backdrop) backdrop.classList.add('show');
+    }
+    function closeFab() {
+      if (!fab) return;
+      fab.classList.remove('open');
+      if (fabBtn)   fabBtn.setAttribute('aria-expanded', 'false');
+      if (fabPanel) fabPanel.setAttribute('aria-hidden', 'true');
+      if (backdrop) backdrop.classList.remove('show');
+    }
+    if (fabBtn) fabBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      fab.classList.contains('open') ? closeFab() : openFab();
+    });
+    if (fabPanel) fabPanel.querySelectorAll('.tp-fab-opt').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        applyTheme(opt.dataset.theme, opt.dataset.name, opt.dataset.color);
+        closeFab();
+      });
+    });
+
+    if (backdrop) backdrop.addEventListener('click', function () { closePicker(); closeFab(); });
     document.addEventListener('click', function (e) {
-      if (!picker.contains(e.target)) closePicker();
+      if (picker && !picker.contains(e.target)) closePicker();
+      if (fab    && !fab.contains(e.target))    closeFab();
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closePicker();
+      if (e.key === 'Escape') { closePicker(); closeFab(); }
     });
   })();
 

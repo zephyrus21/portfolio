@@ -2,16 +2,12 @@
 import Layout from '../../layouts/Layout.astro';
 import PageChrome from '../../components/PageChrome.astro';
 import Footer from '../../components/Footer.astro';
-import { getPublishedPosts, getPostBySlug } from '../../lib/notion';
-
-export async function getStaticPaths() {
-  const posts = await getPublishedPosts();
-  return posts.map((p) => ({ params: { slug: p.slug } }));
-}
+import { getPostBySlug } from '../../lib/notion';
 
 const { slug } = Astro.params;
 const post = await getPostBySlug(slug!);
 if (!post) return Astro.redirect('/blog');
+Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate=600');
 ---
 
 <Layout title={`${post.title} — Piyush Pandey`}>

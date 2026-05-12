@@ -2,6 +2,7 @@ node_modules/
 dist/
 .claude/
 .astro/
+.vercel/
 package-lock.json
 
 *.env

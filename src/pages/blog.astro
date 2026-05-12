@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import { getPublishedPosts } from '../lib/notion';
 
 const posts = await getPublishedPosts();
+Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate=600');
 ---
 
 <Layout title="Writing — Piyush Pandey">

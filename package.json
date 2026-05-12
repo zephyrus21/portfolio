@@ -8,8 +8,9 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/vercel": "^10.0.6",
     "@notionhq/client": "^2.3.0",
-    "astro": "^5.7.0",
+    "astro": "^6.3.1",
     "marked": "^18.0.3",
     "notion-to-md": "^3.1.9"
   }

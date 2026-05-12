@@ -2,21 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import PageChrome from '../components/PageChrome.astro';
 import Footer from '../components/Footer.astro';
+import { getGalleryPhotos } from '../lib/notion';
 
-const photos = [
-  { id: '01', label: 'Film — 35mm', aspect: 'tall' },
-  { id: '02', label: 'Street · 2025', aspect: 'wide' },
-  { id: '03', label: 'Architecture', aspect: 'square' },
-  { id: '04', label: 'Portraits · 2024', aspect: 'tall' },
-  { id: '05', label: 'Travel · Japan', aspect: 'wide' },
-  { id: '06', label: 'Light & Shadow', aspect: 'square' },
-  { id: '07', label: 'Film — 35mm', aspect: 'wide' },
-  { id: '08', label: 'Street · 2024', aspect: 'tall' },
-  { id: '09', label: 'Golden Hour', aspect: 'square' },
-  { id: '10', label: 'Urban · NYC', aspect: 'wide' },
-  { id: '11', label: 'Minimal', aspect: 'tall' },
-  { id: '12', label: 'Nature · 2025', aspect: 'square' },
-];
+const photos = await getGalleryPhotos();
 ---
 
 <Layout title="Gallery — Piyush Pandey">
@@ -38,9 +26,10 @@ const photos = [
         {photos.map((photo, i) => (
           <div class={`gallery-item gallery-item--${photo.aspect} reveal`} style={`--gd: ${i * 60}ms`}>
             <div class="gallery-img">
-              <div class="gallery-placeholder">
-                <span class="gallery-id">{photo.id}</span>
-              </div>
+              {photo.imageUrl
+                ? <img src={photo.imageUrl} alt={photo.label} loading="lazy" decoding="async" />
+                : <div class="gallery-placeholder"><span class="gallery-id">{String(photo.order).padStart(2, '0')}</span></div>
+              }
               <div class="gallery-overlay">
                 <span class="gallery-label">{photo.label}</span>
                 <span class="gallery-arrow">↗</span>
@@ -107,6 +96,19 @@ const photos = [
 
   .gallery-item--tall .gallery-img  { min-height: 560px; }
   .gallery-item--wide .gallery-img  { min-height: 320px; }
+
+  .gallery-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 700ms cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .gallery-item:hover .gallery-img img {
+    transform: scale(1.04);
+  }
 
   .gallery-placeholder {
     position: absolute;

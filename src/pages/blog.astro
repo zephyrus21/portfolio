@@ -2,18 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import PageChrome from '../components/PageChrome.astro';
 import Footer from '../components/Footer.astro';
+import { getPublishedPosts } from '../lib/notion';
 
-const posts = [
-  { year: '2026', title: 'Moving 100 million events a day without losing your nerve.', tag: 'Engineering', slug: 'moving-100m-events' },
-  { year: '2026', title: 'On rewriting TypeScript services to Go — and what it cost.', tag: 'Notes', slug: 'typescript-to-go' },
-  { year: '2025', title: 'Observability for the rest of us: a Prometheus / Grafana primer.', tag: 'Essay', slug: 'observability-primer' },
-  { year: '2025', title: 'Choosing a datastore: a small field guide for backend engineers.', tag: 'Engineering', slug: 'choosing-a-datastore' },
-  { year: '2024', title: 'Pub/Sub, retries, and the politics of "at-least-once".', tag: 'Essay', slug: 'pubsub-retries' },
-  { year: '2024', title: 'The hidden cost of distributed transactions.', tag: 'Engineering', slug: 'distributed-transactions' },
-  { year: '2024', title: 'Rate limiting at scale: token buckets, sliding windows, and tradeoffs.', tag: 'Notes', slug: 'rate-limiting' },
-  { year: '2023', title: 'Building internal tooling that people actually use.', tag: 'Essay', slug: 'internal-tooling' },
-  { year: '2023', title: 'On context switching and the myth of multitasking in engineering.', tag: 'Notes', slug: 'context-switching' },
-];
+const posts = await getPublishedPosts();
 ---
 
 <Layout title="Writing — Piyush Pandey">

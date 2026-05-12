@@ -2,328 +2,16 @@
 import Layout from '../../layouts/Layout.astro';
 import PageChrome from '../../components/PageChrome.astro';
 import Footer from '../../components/Footer.astro';
+import { getPublishedPosts, getPostBySlug } from '../../lib/notion';
 
-export function getStaticPaths() {
-  const posts = [
-    {
-      slug: 'moving-100m-events',
-      year: '2026',
-      tag: 'Engineering',
-      title: 'Moving 100 million events a day without losing your nerve.',
-      subtitle: 'What we learned rebuilding our event pipeline under load — and why most of the hard problems aren\'t technical.',
-      readTime: '12 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'At some point every high-growth company hits the same wall: the system that handled a million events a day stops coping gracefully at ten million, and catastrophically at a hundred. We hit ours eighteen months ago. This is what we did about it.',
-        },
-        {
-          type: 'h2',
-          text: 'The problem with "just add Kafka"',
-        },
-        {
-          type: 'p',
-          text: 'The first instinct is always to reach for a battle-tested message broker. Kafka is the obvious choice — and it\'s a good one. But dropping Kafka into a system not designed around it creates a different class of problems: operational complexity, partition key design, consumer group management, and the deceptively hard question of exactly-once semantics in a world that mostly offers at-least-once.',
-        },
-        {
-          type: 'p',
-          text: 'We spent two weeks benchmarking alternatives. The conclusion was that the broker was never the bottleneck. Our consumer logic was.',
-        },
-        {
-          type: 'h2',
-          text: 'Where time actually goes',
-        },
-        {
-          type: 'p',
-          text: 'Profile before you guess. We\'d been running Datadog APM for a year but had never looked at the event consumer traces closely. When we did, the picture was clear: 67% of latency sat in a single database call that had quietly become a N+1 query over eighteen months of incremental feature additions.',
-        },
-        {
-          type: 'p',
-          text: 'Fixing that one query dropped p99 from 840ms to 110ms without touching the pipeline at all. The lesson is obvious in retrospect — it almost always is.',
-        },
-        {
-          type: 'h2',
-          text: 'Backpressure is not optional',
-        },
-        {
-          type: 'p',
-          text: 'The harder architectural lesson was about backpressure. A system that accepts work faster than it can process it will eventually fail, and the failure mode is usually invisible until it\'s catastrophic. Building explicit backpressure — slowing ingestion when queue depth exceeds a threshold — felt like giving up throughput. In practice it made the system more predictable under load, and more importantly, it gave operators a clear signal that something upstream needed attention.',
-        },
-      ],
-    },
-    {
-      slug: 'typescript-to-go',
-      year: '2026',
-      tag: 'Notes',
-      title: 'On rewriting TypeScript services to Go — and what it cost.',
-      subtitle: 'A candid account of a migration that went mostly right, and the two things we wish we\'d done differently.',
-      readTime: '9 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'We rewrote three core services from TypeScript to Go last year. Memory usage dropped by 70%, latency halved, and the team that owns the services now understands them less well than before. This is both a success story and a cautionary tale.',
-        },
-        {
-          type: 'h2',
-          text: 'Why we did it',
-        },
-        {
-          type: 'p',
-          text: 'The TypeScript services weren\'t slow because of TypeScript. They were slow because of the decisions made during rapid growth: too much work happening in-process, blocking I/O in async handlers, and a dependency graph that had grown to 847 packages. Go was the forcing function that made us confront those decisions.',
-        },
-        {
-          type: 'h2',
-          text: 'What we got right',
-        },
-        {
-          type: 'p',
-          text: 'We rewrote incrementally behind a feature flag, running both implementations in parallel for six weeks and comparing outputs. This caught three behavioural differences that would have been production incidents if we\'d done a hard cutover. The infrastructure cost of running dual systems for six weeks was significant and worth every cent.',
-        },
-        {
-          type: 'h2',
-          text: 'What we got wrong',
-        },
-        {
-          type: 'p',
-          text: 'We underestimated how much implicit knowledge lived in the TypeScript codebase. Variable names, comments, and test descriptions encoded decisions that had no other home. The Go rewrite is faster and leaner, but the team that wrote the original TypeScript has moved on, and the new team is discovering edge cases the hard way. Write better ADRs.',
-        },
-      ],
-    },
-    {
-      slug: 'observability-primer',
-      year: '2025',
-      tag: 'Essay',
-      title: 'Observability for the rest of us: a Prometheus / Grafana primer.',
-      subtitle: 'You don\'t need a SRE team or a six-figure monitoring budget. You need three dashboards and the discipline to look at them.',
-      readTime: '14 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'Most engineering teams know they should have better observability. Most teams also don\'t have it, because the gap between "I should set this up" and "this is actually useful in a 3am incident" is larger than it looks from the outside.',
-        },
-        {
-          type: 'h2',
-          text: 'The three dashboards rule',
-        },
-        {
-          type: 'p',
-          text: 'Start with three dashboards: system health (CPU, memory, request rate, error rate), service latency (p50, p95, p99 per endpoint), and business metrics (the two or three numbers that tell you if the product is working). If you can\'t get to all three within 60 seconds of an alert firing, your dashboards are too complex.',
-        },
-        {
-          type: 'h2',
-          text: 'Prometheus in five minutes',
-        },
-        {
-          type: 'p',
-          text: 'Prometheus is a pull-based metrics system. It scrapes an HTTP endpoint on your service at a configurable interval and stores time-series data. You instrument your code with a client library to expose metrics at /metrics, and Prometheus does the rest. The mental model is simple: counters count things, gauges measure things, histograms observe distributions.',
-        },
-        {
-          type: 'h2',
-          text: 'The alert that actually pages you',
-        },
-        {
-          type: 'p',
-          text: 'The most valuable alert is not the one that fires when something is broken. It\'s the one that fires when something is about to break. Burn rate alerts on SLOs — alerting when you\'re consuming your error budget faster than expected — give you the runway to fix problems before customers notice them. That\'s the goal.',
-        },
-      ],
-    },
-    {
-      slug: 'choosing-a-datastore',
-      year: '2025',
-      tag: 'Engineering',
-      title: 'Choosing a datastore: a small field guide for backend engineers.',
-      subtitle: 'The decision tree no one gives you when you\'re standing in front of a whiteboard at 2pm on a Tuesday.',
-      readTime: '11 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'Every few months someone asks me which database they should use. The honest answer is always "it depends" — but that answer is only useful if you know what it depends on. This is my attempt to make the dependencies explicit.',
-        },
-        {
-          type: 'h2',
-          text: 'Start with the access pattern',
-        },
-        {
-          type: 'p',
-          text: 'Before you think about scale, consistency, or durability, think about how you\'ll read and write data. Point lookups by primary key are different from range scans. Time-series queries are different from full-text search. Graph traversals are different from document storage. Your access pattern should be the first filter, not an afterthought.',
-        },
-        {
-          type: 'h2',
-          text: 'The CAP theorem is real but misapplied',
-        },
-        {
-          type: 'p',
-          text: 'The CAP theorem is often cited in datastore discussions and almost always misapplied. Most practical systems don\'t face a choice between consistency and availability in the abstract — they face specific tradeoffs in specific failure scenarios. The more useful question is: what does my system do when a network partition occurs? Can I accept stale reads? Can I accept write conflicts?',
-        },
-        {
-          type: 'h2',
-          text: 'Postgres is usually the answer',
-        },
-        {
-          type: 'p',
-          text: 'For most applications at most scales, a well-tuned PostgreSQL instance will outlast whatever you throw at it. The pathological cases — millions of writes per second, petabytes of time-series data, complex graph relationships — are real but rare. Don\'t pay the operational cost of a distributed datastore before you\'ve confirmed you need one.',
-        },
-      ],
-    },
-    {
-      slug: 'pubsub-retries',
-      year: '2024',
-      tag: 'Essay',
-      title: 'Pub/Sub, retries, and the politics of "at-least-once".',
-      subtitle: 'Why "at-least-once" is not a safe default, and what to do about it.',
-      readTime: '10 min read',
-      body: [
-        {
-          type: 'p',
-          text: '"At-least-once delivery" sounds reassuring. Messages won\'t be lost. In practice, it means every consumer must be idempotent, and making real systems idempotent is substantially harder than the distributed systems literature suggests.',
-        },
-        {
-          type: 'h2',
-          text: 'The idempotency gap',
-        },
-        {
-          type: 'p',
-          text: 'Idempotency means processing the same message twice produces the same result. For a simple "increment a counter" operation, this is easy to reason about. For "send a welcome email and create an account and charge a card" — which is what most real event handlers do — idempotency requires tracking state at every step and coordinating rollbacks across systems that may not support them.',
-        },
-        {
-          type: 'h2',
-          text: 'The retry budget',
-        },
-        {
-          type: 'p',
-          text: 'Retries are not free. A naive retry policy on a consumer that\'s failing because a downstream service is overloaded will make the overload worse. Exponential backoff with jitter, a dead-letter queue after N failures, and a circuit breaker on the downstream call are the minimum viable retry infrastructure for any production consumer.',
-        },
-      ],
-    },
-    {
-      slug: 'distributed-transactions',
-      year: '2024',
-      tag: 'Engineering',
-      title: 'The hidden cost of distributed transactions.',
-      subtitle: 'Two-phase commit looks elegant on a whiteboard. Here\'s what it looks like six months later.',
-      readTime: '8 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'Distributed transactions promise ACID semantics across multiple services. They deliver them — at a cost in complexity, latency, and failure surface that compounds over time.',
-        },
-        {
-          type: 'h2',
-          text: 'The two-phase commit trap',
-        },
-        {
-          type: 'p',
-          text: 'Two-phase commit requires a coordinator. The coordinator is a single point of failure. When the coordinator crashes mid-transaction, participants are left holding locks indefinitely. The recovery protocols for this scenario are correct but complex, and complex recovery logic is where bugs live.',
-        },
-        {
-          type: 'h2',
-          text: 'Sagas as an alternative',
-        },
-        {
-          type: 'p',
-          text: 'The saga pattern replaces a distributed transaction with a sequence of local transactions, each with a compensating transaction that undoes its effects. Sagas are eventually consistent rather than strongly consistent, but in most business domains — where the operations take seconds or minutes, not microseconds — eventual consistency is fine. The explicit compensation logic is harder to write than it looks, but it\'s inspectable, testable, and doesn\'t require a coordinator.',
-        },
-      ],
-    },
-    {
-      slug: 'rate-limiting',
-      year: '2024',
-      tag: 'Notes',
-      title: 'Rate limiting at scale: token buckets, sliding windows, and tradeoffs.',
-      subtitle: 'The algorithm matters less than where you put the state.',
-      readTime: '7 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'Rate limiting is one of those problems that looks solved until you need to do it across multiple servers. Then it becomes a distributed systems problem, and distributed systems problems have no clean solutions — only tradeoffs.',
-        },
-        {
-          type: 'h2',
-          text: 'Algorithms',
-        },
-        {
-          type: 'p',
-          text: 'Token bucket and sliding window log are the two algorithms worth understanding deeply. Token bucket is simple and allows bursting. Sliding window log is accurate but memory-intensive. Fixed window counter is neither, but it\'s what most people implement first because it\'s easy to reason about.',
-        },
-        {
-          type: 'h2',
-          text: 'Where to put the state',
-        },
-        {
-          type: 'p',
-          text: 'Local rate limiting (per-instance counters) is fast and simple but inconsistent across a fleet. Centralised rate limiting (Redis) is consistent but adds a network round-trip to every request. Approximate distributed rate limiting (gossip protocols, sliding window with eventual consistency) splits the difference. Most products should start with Redis and migrate only when the latency budget demands it.',
-        },
-      ],
-    },
-    {
-      slug: 'internal-tooling',
-      year: '2023',
-      tag: 'Essay',
-      title: 'Building internal tooling that people actually use.',
-      subtitle: 'The graveyard of internal tools is full of things that solved the right problem at the wrong time.',
-      readTime: '9 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'Internal tools have a reputation for being abandoned. Engineers build them enthusiastically, the target users adopt them reluctantly, and six months later the tool is unmaintained and the team is back to spreadsheets. I\'ve seen this cycle enough times to believe it\'s structural, not accidental.',
-        },
-        {
-          type: 'h2',
-          text: 'Solve the job, not the feature',
-        },
-        {
-          type: 'p',
-          text: 'The tools that survive are the ones that remove a specific pain from a specific person\'s day. Not "a dashboard for the data team" but "a way for Sarah to check whether a customer\'s export job failed without filing a support ticket." The more specific the job, the more likely the tool gets used.',
-        },
-        {
-          type: 'h2',
-          text: 'Maintenance is the product',
-        },
-        {
-          type: 'p',
-          text: 'An internal tool that stops working is worse than no tool. It trains the people who depend on it to not depend on it, and that training is hard to undo. Before you build, ask: who owns this when I move to another team? If the answer is "no one", the tool will die, and it\'s not worth building.',
-        },
-      ],
-    },
-    {
-      slug: 'context-switching',
-      year: '2023',
-      tag: 'Notes',
-      title: 'On context switching and the myth of multitasking in engineering.',
-      subtitle: 'What the research says, and what it actually means for how you structure your day.',
-      readTime: '6 min read',
-      body: [
-        {
-          type: 'p',
-          text: 'Engineers know context switching is expensive. We know it abstractly, in the same way we know that smoking is bad. The knowing doesn\'t change the behaviour, because the pressures that cause context switching — Slack, standups, competing priorities — are structural, not personal.',
-        },
-        {
-          type: 'h2',
-          text: 'The recovery cost',
-        },
-        {
-          type: 'p',
-          text: 'The research on recovery time is sobering: after an interruption, it takes an average of 23 minutes to return to the original task. For deep work — the kind required to debug a race condition or design a new API — the real cost is higher, because deep work requires a mental context that takes time to reconstruct. A day with five interruptions may contain no deep work at all.',
-        },
-        {
-          type: 'h2',
-          text: 'What to do about it',
-        },
-        {
-          type: 'p',
-          text: 'The structural fix is calendar blocking, and it works. Two hours in the morning with Slack closed is not a luxury — it\'s a prerequisite for the kind of output that makes engineers valuable. The social contract required to make it work is the harder part: the team needs to agree that async is the default, and that most things that feel urgent are not.',
-        },
-      ],
-    },
-  ];
-
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((p) => ({ params: { slug: p.slug } }));
 }
 
-const { post } = Astro.props;
+const { slug } = Astro.params;
+const post = await getPostBySlug(slug!);
+if (!post) return Astro.redirect('/blog');
 ---
 
 <Layout title={`${post.title} — Piyush Pandey`}>
@@ -345,18 +33,12 @@ const { post } = Astro.props;
         </div>
 
         <h1 class="post-title reveal">{post.title}</h1>
-        <p class="post-subtitle reveal">{post.subtitle}</p>
+        {post.subtitle && <p class="post-subtitle reveal">{post.subtitle}</p>}
       </header>
 
       <div class="post-rule reveal"></div>
 
-      <div class="post-body">
-        {post.body.map((block) => (
-          block.type === 'h2'
-            ? <h2 class="post-h2 reveal">{block.text}</h2>
-            : <p class="post-p reveal">{block.text}</p>
-        ))}
-      </div>
+      <div class="post-body reveal" set:html={post.contentHtml} />
 
       <footer class="post-footer reveal">
         <a href="/blog" class="back-link">
@@ -460,15 +142,15 @@ const { post } = Astro.props;
     color: var(--ink);
   }
 
-  .post-p {
+  .post-body :global(p) {
     margin: 0 0 1.6em;
   }
 
-  .post-p:last-child {
+  .post-body :global(p:last-child) {
     margin-bottom: 0;
   }
 
-  .post-h2 {
+  .post-body :global(h2) {
     font-family: var(--serif);
     font-weight: 400;
     font-size: clamp(22px, 2.4vw, 32px);
@@ -476,6 +158,62 @@ const { post } = Astro.props;
     letter-spacing: -0.01em;
     margin: 2.4em 0 0.8em;
     color: var(--ink);
+  }
+
+  .post-body :global(h3) {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1.3;
+    margin: 2em 0 0.6em;
+    color: var(--ink);
+  }
+
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    padding-left: 1.5em;
+    margin: 0 0 1.6em;
+  }
+
+  .post-body :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 2px solid var(--rule);
+    padding-left: 1.2em;
+    margin: 2em 0;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .post-body :global(code) {
+    font-family: var(--mono);
+    font-size: 0.82em;
+    background: var(--rule);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+  }
+
+  .post-body :global(pre) {
+    font-family: var(--mono);
+    font-size: 0.82em;
+    background: var(--rule);
+    padding: 1.2em 1.4em;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 0 0 1.6em;
+  }
+
+  .post-body :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .post-body :global(a) {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .post-footer {

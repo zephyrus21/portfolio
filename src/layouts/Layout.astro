@@ -128,6 +128,7 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
 
       /* Custom cursor */
       (function () {
+        if (window.matchMedia('(pointer: coarse)').matches) return;
         var c = document.getElementById('cursor');
         var x = 0, y = 0, tx = 0, ty = 0;
         window.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; });

@@ -48,6 +48,26 @@ body {
   body {
     cursor: auto;
   }
+
+  /* Hide custom cursor element entirely on touch */
+  .cursor { display: none; }
+
+  /* Disable scroll progress bar on touch devices */
+  .scroll-progress { display: none; }
+
+  /* Disable scroll-cue animation */
+  .scroll-cue { display: none; }
+
+  /* Reveal elements immediately — no entrance animation */
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .reveal-line > span {
+    transform: none;
+    transition: none;
+  }
 }
 
 body.no-custom-cursor {

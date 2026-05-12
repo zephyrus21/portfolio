@@ -33,7 +33,9 @@
   (function heroMotion() {
     var root = document.getElementById('heroName');
     var words = root.querySelectorAll('.word');
+    var isMobile = window.matchMedia('(pointer: coarse)').matches;
     var globalIdx = 0;
+
     words.forEach(function (w) {
       var txt = w.dataset.word;
       var italic = w.dataset.italic === 'true';
@@ -41,30 +43,35 @@
       w.innerHTML = '';
       for (var i = 0; i < len; i++) {
         var s = document.createElement('span');
-        s.className = 'char entering' + (italic ? ' italic' : '');
+        s.className = 'char' + (italic ? ' italic' : '');
+        if (!isMobile) s.classList.add('entering');
         s.textContent = txt[i];
         var mid = (len - 1) / 2;
         var offset = (i - mid) / mid;
         s.style.setProperty('--cw', (offset * 28).toFixed(1));
         s.style.setProperty('--ch', (Math.abs(offset) * 14).toFixed(1));
-        s.style.setProperty('--cd', (260 + globalIdx * 55) + 'ms');
+        if (!isMobile) s.style.setProperty('--cd', (260 + globalIdx * 55) + 'ms');
         w.appendChild(s);
         globalIdx++;
       }
     });
 
-    requestAnimationFrame(function () {
-      root.querySelectorAll('.char').forEach(function (c) {
-        c.classList.remove('entering');
-        c.classList.add('entered');
+    if (!isMobile) {
+      requestAnimationFrame(function () {
+        root.querySelectorAll('.char').forEach(function (c) {
+          c.classList.remove('entering');
+          c.classList.add('entered');
+        });
       });
-    });
 
-    setTimeout(function () {
-      root.querySelectorAll('.char').forEach(function (c) {
-        c.style.transition = 'none';
-      });
-    }, 1500);
+      setTimeout(function () {
+        root.querySelectorAll('.char').forEach(function (c) {
+          c.style.transition = 'none';
+        });
+      }, 1500);
+    }
+
+    if (isMobile) return;
 
     var target = { mx: 0, my: 0 };
     var current = { mx: 0, my: 0 };

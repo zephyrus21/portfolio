@@ -110,6 +110,22 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
       applyTweaks(window.__TWEAK_DEFAULTS__);
       window.__applyTweaks = applyTweaks;
 
+      /* After the chromeIn animation completes, remove the animation so its
+         fill value (identity matrix) doesn't persist as a transform on
+         .chrome-right. Chromium treats any animation-derived transform —
+         even transform:none — as matrix(1,0,0,1,0,0), which creates a
+         stacking context and breaks position:fixed children (theme-picker
+         panel) that should be positioned relative to the viewport. */
+      (function () {
+        document.querySelectorAll('.chrome > *').forEach(function (el) {
+          el.addEventListener('animationend', function handler() {
+            this.style.animation = 'none';
+            this.style.opacity = '1';
+            this.removeEventListener('animationend', handler);
+          });
+        });
+      })();
+
       /* Custom cursor */
       (function () {
         var c = document.getElementById('cursor');

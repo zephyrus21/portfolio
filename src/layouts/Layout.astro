@@ -110,21 +110,6 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
       applyTweaks(window.__TWEAK_DEFAULTS__);
       window.__applyTweaks = applyTweaks;
 
-      /* Clear chromeIn animation fill after completion so .chrome-right
-         doesn't retain a transform value that would make it a containing
-         block for position:fixed children (Chromium represents even
-         transform:none fills as matrix(1,0,0,1,0,0), creating a stacking
-         context and breaking the theme-picker panel positioning). */
-      (function () {
-        document.querySelectorAll('.chrome > *').forEach(function (el) {
-          el.addEventListener('animationend', function handler() {
-            this.style.animation = 'none';
-            this.style.opacity = '1';
-            this.removeEventListener('animationend', handler);
-          });
-        });
-      })();
-
       /* Custom cursor */
       (function () {
         var c = document.getElementById('cursor');

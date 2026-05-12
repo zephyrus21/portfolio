@@ -1360,7 +1360,7 @@ body.theme-rose-pine .tp-panel-inner {
   .tp-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 200;
+    z-index: 49;
     background: rgba(0, 0, 0, 0.32);
     opacity: 0;
     pointer-events: none;

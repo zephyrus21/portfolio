@@ -23,10 +23,10 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
     <!-- Apply theme before paint to avoid flash -->
     <script is:inline>
       (function () {
-        var d = { theme: 'warm', heroMotion: 'still', customCursor: false, density: 'airy', typePair: 'all-mono' };
+        var d = { theme: 'warm', heroMotion: 'weight', customCursor: true, density: 'airy', typePair: 'all-mono' };
         window.__TWEAK_DEFAULTS__ = d;
-        var ALL_THEMES = ['theme-warm','theme-dark','theme-mono','theme-cool',
-          'theme-catppuccin','theme-latte','theme-nord','theme-gruvbox','theme-rose-pine'];
+        var ALL_THEMES = ['theme-warm','theme-dark','theme-cool',
+          'theme-catppuccin','theme-nord','theme-gruvbox','theme-rose-pine'];
         function applyTweaks(t) {
           var b = document.documentElement;
           ALL_THEMES.forEach(function(c){ b.classList.remove(c); });
@@ -52,8 +52,8 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
       /* Tweak defaults & applyTweaks (full version) */
       window.__TWEAK_DEFAULTS__ = {
         theme: 'warm',
-        heroMotion: 'still',
-        customCursor: false,
+        heroMotion: 'weight',
+        customCursor: true,
         density: 'airy',
         typePair: 'all-mono'
       };
@@ -71,10 +71,8 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
         var THEME_META = {
           'warm': { name: 'Warm', color: '#f3efe7' },
           'dark': { name: 'Ink', color: '#0d0c0b' },
-          'mono': { name: 'Mono', color: '#fafafa' },
           'cool': { name: 'Cool', color: '#eef0f2' },
           'catppuccin': { name: 'Catppuccin', color: '#1e1e2e' },
-          'latte': { name: 'Latte', color: '#eff1f5' },
           'nord': { name: 'Nord', color: '#2e3440' },
           'gruvbox': { name: 'Gruvbox', color: '#282828' },
           'rose-pine': { name: 'Rosé Pine', color: '#191724' }
@@ -112,6 +110,21 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
       applyTweaks(window.__TWEAK_DEFAULTS__);
       window.__applyTweaks = applyTweaks;
 
+      /* Clear chromeIn animation fill after completion so .chrome-right
+         doesn't retain a transform value that would make it a containing
+         block for position:fixed children (Chromium represents even
+         transform:none fills as matrix(1,0,0,1,0,0), creating a stacking
+         context and breaking the theme-picker panel positioning). */
+      (function () {
+        document.querySelectorAll('.chrome > *').forEach(function (el) {
+          el.addEventListener('animationend', function handler() {
+            this.style.animation = 'none';
+            this.style.opacity = '1';
+            this.removeEventListener('animationend', handler);
+          });
+        });
+      })();
+
       /* Custom cursor */
       (function () {
         var c = document.getElementById('cursor');
@@ -123,7 +136,7 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
           requestAnimationFrame(loop);
         }
         loop();
-        document.querySelectorAll('a, .work-row, [data-cursor="ring"]').forEach(function (el) {
+        document.querySelectorAll('a, button, .work-row, [data-cursor="ring"]').forEach(function (el) {
           el.addEventListener('pointerenter', function () { c.classList.add('ring'); });
           el.addEventListener('pointerleave', function () { c.classList.remove('ring'); });
         });

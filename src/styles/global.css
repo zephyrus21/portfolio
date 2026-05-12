@@ -90,8 +90,7 @@ body::before {
   transform: translate(-50%, -50%);
   transition: width 220ms ease, height 220ms ease, opacity 220ms ease, background 400ms ease;
   z-index: 9999;
-  mix-blend-mode: difference;
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
 .cursor.ring {
@@ -125,6 +124,9 @@ body.no-custom-cursor .cursor {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink);
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  transition: background 600ms ease, border-color 600ms ease;
 }
 
 .chrome .mark {
@@ -768,7 +770,6 @@ section.in-view .eyebrow .bar {
   border-top: 1px solid var(--rule);
   align-items: baseline;
   position: relative;
-  overflow: hidden;
 }
 
 .exp-row:last-child {
@@ -1133,15 +1134,6 @@ body.theme-dark {
   --accent: #f1ece2;
 }
 
-body.theme-mono {
-  --bg: #fafafa;
-  --bg-2: #f2f2f2;
-  --ink: #0a0a0a;
-  --ink-soft: #555;
-  --rule: rgba(0, 0, 0, 0.12);
-  --accent: #0a0a0a;
-}
-
 body.theme-cool {
   --bg: #eef0f2;
   --bg-2: #e3e6ea;
@@ -1158,15 +1150,6 @@ body.theme-catppuccin {
   --ink-soft: #a6adc8;
   --rule: rgba(205, 214, 244, 0.1);
   --accent: #cba6f7;
-}
-
-body.theme-latte {
-  --bg: #eff1f5;
-  --bg-2: #e6e9ef;
-  --ink: #4c4f69;
-  --ink-soft: #6c6f85;
-  --rule: rgba(76, 79, 105, 0.1);
-  --accent: #8839ef;
 }
 
 body.theme-nord {
@@ -1249,10 +1232,10 @@ body.theme-rose-pine {
 
 /* Dropdown panel – desktop */
 .tp-panel {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  z-index: 200;
+  position: fixed;
+  top: 60px;
+  right: var(--gutter);
+  z-index: 300;
   min-width: 168px;
   opacity: 0;
   transform: translateY(-6px) scale(0.97);
@@ -1377,7 +1360,7 @@ body.theme-rose-pine .tp-panel-inner {
   .tp-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 199;
+    z-index: 200;
     background: rgba(0, 0, 0, 0.32);
     opacity: 0;
     pointer-events: none;
@@ -1393,9 +1376,7 @@ body.theme-rose-pine .tp-panel-inner {
 
 /* Page load chrome animation */
 .chrome > * {
-  opacity: 0;
-  transform: translateY(-8px);
-  animation: chromeIn 800ms cubic-bezier(.2, .7, .2, 1) forwards;
+  animation: chromeIn 800ms cubic-bezier(.2, .7, .2, 1) both;
 }
 
 .chrome > *:nth-child(1) { animation-delay: 200ms; }
@@ -1403,7 +1384,8 @@ body.theme-rose-pine .tp-panel-inner {
 .chrome > *:nth-child(3) { animation-delay: 440ms; }
 
 @keyframes chromeIn {
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; }
 }
 
 /* Page corner ornaments */

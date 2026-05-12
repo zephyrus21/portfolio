@@ -36,11 +36,9 @@
         <div class="tp-panel-inner">
           <button class="tp-option active" role="option" data-theme="warm"       data-name="Warm"       data-color="#f3efe7" aria-selected="true" ><span class="tp-dot" style="--tw:#f3efe7"></span>Warm</button>
           <button class="tp-option"        role="option" data-theme="dark"       data-name="Ink"        data-color="#0d0c0b" aria-selected="false"><span class="tp-dot" style="--tw:#0d0c0b"></span>Ink</button>
-          <button class="tp-option"        role="option" data-theme="mono"       data-name="Mono"       data-color="#fafafa" aria-selected="false"><span class="tp-dot" style="--tw:#fafafa"></span>Mono</button>
           <button class="tp-option"        role="option" data-theme="cool"       data-name="Cool"       data-color="#eef0f2" aria-selected="false"><span class="tp-dot" style="--tw:#eef0f2"></span>Cool</button>
           <div class="tp-divider"></div>
           <button class="tp-option"        role="option" data-theme="catppuccin" data-name="Catppuccin" data-color="#1e1e2e" aria-selected="false"><span class="tp-dot" style="--tw:#1e1e2e"></span>Catppuccin</button>
-          <button class="tp-option"        role="option" data-theme="latte"      data-name="Latte"      data-color="#eff1f5" aria-selected="false"><span class="tp-dot" style="--tw:#eff1f5"></span>Latte</button>
           <button class="tp-option"        role="option" data-theme="nord"       data-name="Nord"       data-color="#2e3440" aria-selected="false"><span class="tp-dot" style="--tw:#2e3440"></span>Nord</button>
           <button class="tp-option"        role="option" data-theme="gruvbox"    data-name="Gruvbox"    data-color="#282828" aria-selected="false"><span class="tp-dot" style="--tw:#282828"></span>Gruvbox</button>
           <button class="tp-option"        role="option" data-theme="rose-pine"  data-name="Rosé Pine"  data-color="#191724" aria-selected="false"><span class="tp-dot" style="--tw:#191724"></span>Rosé Pine</button>
@@ -80,6 +78,14 @@
     if (!picker || !btn || !panel) return;
 
     function openPicker() {
+      if (window.innerWidth > 700) {
+        var rect = btn.getBoundingClientRect();
+        panel.style.top = (rect.bottom + 10) + 'px';
+        panel.style.right = (window.innerWidth - rect.right) + 'px';
+      } else {
+        panel.style.top = '';
+        panel.style.right = '';
+      }
       picker.classList.add('open');
       btn.setAttribute('aria-expanded', 'true');
       panel.setAttribute('aria-hidden', 'false');

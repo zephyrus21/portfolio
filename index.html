@@ -1385,6 +1385,132 @@
     .socials a:hover .s-label {
       transform: translateY(-2px);
     }
+
+    /* ========= Mobile nav ========= */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: 0;
+      padding: 4px 0;
+      cursor: pointer;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .nav-toggle .bar {
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: currentColor;
+      margin: 5px 0;
+      transition: transform 400ms cubic-bezier(.2, .7, .2, 1), opacity 300ms ease;
+    }
+
+    .nav-toggle.open .bar:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .nav-toggle.open .bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.open .bar:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
+    .mobile-nav {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+
+      .chrome nav,
+      .chrome .status {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      /* shrink theme switch */
+      .ts-track {
+        width: 80px;
+        font-size: 8px;
+      }
+
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        z-index: 48;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0 var(--gutter);
+        gap: 4px;
+        transform: translateY(-100%);
+        transition: transform 550ms cubic-bezier(.2, .7, .2, 1);
+        pointer-events: none;
+      }
+
+      .mobile-nav.open {
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .mobile-nav a {
+        font-family: var(--serif);
+        font-size: clamp(40px, 12vw, 64px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 400ms ease, transform 400ms cubic-bezier(.2, .7, .2, 1);
+        transition-delay: var(--nd, 0ms);
+      }
+
+      .mobile-nav.open a {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .mobile-nav a .mn-num {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        color: var(--ink-soft);
+        text-transform: uppercase;
+      }
+
+      /* footer stacks on mobile */
+      footer {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+      }
+
+      /* big email wraps */
+      .contact .big-email {
+        overflow-wrap: break-word;
+        word-break: break-all;
+        hyphens: none;
+      }
+
+      /* hero bottom: hide cursor hint on touch */
+      .hero-bottom .cursor-hint {
+        display: none;
+      }
+    }
   </style>
 </head>
 
@@ -1419,8 +1545,21 @@
         </span>
       </button>
       <div class="status"><span class="live"></span>AVAILABLE</div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
     </div>
   </header>
+
+  <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+    <a href="#about" style="--nd:60ms"><span class="mn-num">01</span>About</a>
+    <a href="#work" style="--nd:120ms"><span class="mn-num">02</span>Work</a>
+    <a href="#experience" style="--nd:180ms"><span class="mn-num">03</span>Experience</a>
+    <a href="#writing" style="--nd:240ms"><span class="mn-num">04</span>Writing</a>
+    <a href="#contact" style="--nd:300ms"><span class="mn-num">05</span>Contact</a>
+  </nav>
 
   <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -1446,7 +1585,7 @@
     </div>
 
     <div class="hero-bottom">
-      <span><span class="live-ink"></span>&nbsp;Move cursor · letters respond</span>
+      <span class="cursor-hint"><span class="live-ink"></span>&nbsp;Move cursor · letters respond</span>
       <span class="scroll-cue">Scroll <span class="line"></span></span>
     </div>
   </section>
@@ -1620,10 +1759,10 @@
       data-magnetic data-cursor="ring">pandey.<em>piyus</em>@gmail.com</a>
 
     <div class="socials">
-      <a href="https://github.com/" data-magnetic data-cursor="ring"><span class="s-label">GitHub</span> <span
+      <a href="https://github.com/zephyrus21" data-magnetic data-cursor="ring"><span class="s-label">GitHub</span> <span
           class="arrow">↗</span></a>
-      <a href="https://linkedin.com/" data-magnetic data-cursor="ring"><span class="s-label">LinkedIn</span> <span
-          class="arrow">↗</span></a>
+      <a href="https://linkedin.com/in/zephyrus21" data-magnetic data-cursor="ring"><span
+          class="s-label">LinkedIn</span> <span class="arrow">↗</span></a>
       <a href="tel:+919114182378" data-magnetic data-cursor="ring"><span class="s-label">+91 · 91141 82378</span> <span
           class="arrow">↗</span></a>
       <a href="/cdn-cgi/l/email-protection#1060717e7475693e607969656350777d71797c3e737f7d" data-magnetic
@@ -1958,6 +2097,29 @@
         ).join('');
         tr.innerHTML = html2 + html2 + html2 + html2;
       }
+    })();
+
+    /* ============= Mobile nav toggle ============= */
+    (function mobileNav() {
+      const toggle = document.getElementById('navToggle');
+      const nav = document.getElementById('mobileNav');
+      if (!toggle || !nav) return;
+      toggle.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        toggle.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', open);
+        nav.setAttribute('aria-hidden', !open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+      nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          nav.classList.remove('open');
+          toggle.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+          nav.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        });
+      });
     })();
 
     /* ============= Tweak listener (host -> apply) ============= */

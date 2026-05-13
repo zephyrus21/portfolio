@@ -23,6 +23,7 @@ Single-page Astro portfolio. No framework integrations — all interactivity is 
 **Styles:** `src/styles/global.css` — all CSS lives here (no scoped component styles). CSS custom properties on `:root` drive theming (`--bg`, `--ink`, `--ink-soft`, `--rule`, `--serif`, `--sans`, `--mono`, `--gutter`, `--pad-y`). Four theme variants (`theme-warm`, `theme-dark`, `theme-mono`, `theme-cool`) swap those vars via body class.
 
 **Components** (`src/components/`): Each `.astro` file is a self-contained section. Components that need interactivity include their own `<script is:inline>` at the bottom:
+
 - `Chrome.astro` — fixed nav, mobile hamburger, theme toggle, scramble text effect
 - `Hero.astro` — parallax letter-tilt via pointer position + `window.__heroMotion` mode flag
 - `Ticker.astro` — fills dual marquee rows with JS
@@ -31,7 +32,7 @@ Single-page Astro portfolio. No framework integrations — all interactivity is 
 
 **Script globals:** `window.__TWEAK_DEFAULTS__`, `window.__applyTweaks`, `window.__heroMotion` — set in Layout, consumed by Chrome and Hero. Use `is:inline` (not bundled modules) to preserve execution order and these globals.
 
-**`index.html` at root** — legacy single-file version kept as reference; the Astro build output in `dist/` is the canonical artifact.
+The Astro build output in `dist/` is the canonical artifact.
 
 ## Additional Pages
 

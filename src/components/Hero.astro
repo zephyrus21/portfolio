@@ -34,96 +34,84 @@
     var root = document.getElementById('heroName');
     var words = root.querySelectorAll('.word');
     var isMobile = window.matchMedia('(pointer: coarse)').matches;
+    var glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
     if (isMobile) {
-      /* On touch: render plain text, no char-splitting, no animation */
       words.forEach(function (w) {
         var italic = w.dataset.italic === 'true';
-        w.innerHTML = italic
-          ? '<em>' + w.dataset.word + '</em>'
-          : w.dataset.word;
+        w.innerHTML = italic ? '<em>' + w.dataset.word + '</em>' : w.dataset.word;
       });
       return;
     }
 
-    var globalIdx = 0;
+    /* Build char spans, start each as a random glyph */
+    var allChars = [];
     words.forEach(function (w) {
       var txt = w.dataset.word;
-      var italic = w.dataset.italic === 'true';
-      var len = txt.length;
       w.innerHTML = '';
-      for (var i = 0; i < len; i++) {
+      for (var i = 0; i < txt.length; i++) {
         var s = document.createElement('span');
-        s.className = 'char entering' + (italic ? ' italic' : '');
-        s.textContent = txt[i];
-        var mid = (len - 1) / 2;
-        var offset = (i - mid) / mid;
-        s.style.setProperty('--cw', (offset * 28).toFixed(1));
-        s.style.setProperty('--ch', (Math.abs(offset) * 14).toFixed(1));
-        s.style.setProperty('--cd', (260 + globalIdx * 55) + 'ms');
+        s.className = 'char scrambling';
+        s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
         w.appendChild(s);
-        globalIdx++;
+        allChars.push({ el: s, final: txt[i] });
       }
     });
 
-    requestAnimationFrame(function () {
-      /* Force the browser to commit the entering state (translateY(110%), opacity:0)
-         before we swap classes. Without this reflow, the browser batches both the
-         "from" and "to" states into a single paint and the transition never fires. */
-      void root.offsetHeight;
-      root.querySelectorAll('.char').forEach(function (c) {
-        c.classList.remove('entering');
-        c.classList.add('entered');
-      });
+    /* Stagger-resolve: each char scrambles briefly then snaps to its final letter */
+    allChars.forEach(function (item, idx) {
+      var resolveAt = 180 + idx * 58;
+      setTimeout(function () {
+        var count = 0;
+        var cycles = 5 + Math.floor(Math.random() * 4);
+        var timer = setInterval(function () {
+          if (count >= cycles) {
+            item.el.textContent = item.final;
+            item.el.classList.remove('scrambling');
+            item.el.classList.add('resolved');
+            clearInterval(timer);
+          } else {
+            item.el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+            count++;
+          }
+        }, 38);
+      }, resolveAt);
     });
 
-    setTimeout(function () {
-      root.querySelectorAll('.char').forEach(function (c) {
-        c.style.transition = 'none';
-      });
-    }, 1500);
+    /* Hover: re-scramble a single char briefly when cursor passes over it */
+    root.addEventListener('pointerover', function (e) {
+      var c = e.target.closest && e.target.closest('.char.resolved');
+      if (!c) return;
+      var finalChar = c.textContent;
+      c.classList.replace('resolved', 'scrambling');
+      var count = 0;
+      var timer = setInterval(function () {
+        if (count >= 5) {
+          c.textContent = finalChar;
+          c.classList.replace('scrambling', 'resolved');
+          clearInterval(timer);
+        } else {
+          c.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+          count++;
+        }
+      }, 35);
+    });
 
+    /* 3D tilt — each word has different rotation multipliers set in CSS */
     var target = { mx: 0, my: 0 };
     var current = { mx: 0, my: 0 };
 
-    function onMove(e) {
-      var r = root.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width;
-      var y = (e.clientY - r.top) / r.height;
-      target.mx = Math.max(-1, Math.min(1, (x - 0.5) * 2));
-      target.my = Math.max(-1, Math.min(1, (y - 0.5) * 2));
-    }
-    function onLeave() { target.mx = 0; target.my = 0; }
+    window.addEventListener('pointermove', function (e) {
+      target.mx = (e.clientX / window.innerWidth - 0.5) * 2;
+      target.my = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
 
-    window.addEventListener('pointermove', onMove);
-    root.addEventListener('pointerleave', onLeave);
-
-    function loop() {
-      current.mx += (target.mx - current.mx) * 0.08;
-      current.my += (target.my - current.my) * 0.08;
-      var mode = window.__heroMotion || 'weight';
-      var mx = current.mx, my = current.my;
-      if (mode === 'repel') { mx *= -1; my *= -1; }
-      if (mode === 'skew')  { mx *= 1.2; my *= 0.6; }
-      if (mode === 'still') { mx = 0; my = 0; }
-
-      root.style.setProperty('--mx', mx.toFixed(3));
-      root.style.setProperty('--my', my.toFixed(3));
-
-      var chars = root.querySelectorAll('.char');
-      var r = root.getBoundingClientRect();
-      var localX = (current.mx + 1) * 0.5 * r.width + r.left;
-      var localY = (current.my + 1) * 0.5 * r.height + r.top;
-      chars.forEach(function (c) {
-        var cr = c.getBoundingClientRect();
-        var dx = (cr.left + cr.width / 2) - localX;
-        var dy = (cr.top + cr.height / 2) - localY;
-        var d = Math.hypot(dx, dy);
-        c.style.setProperty('--prox', Math.max(0, 1 - d / 240).toFixed(3));
-      });
-
+    (function loop() {
+      current.mx += (target.mx - current.mx) * 0.06;
+      current.my += (target.my - current.my) * 0.06;
+      root.style.setProperty('--mx', current.mx.toFixed(3));
+      root.style.setProperty('--my', current.my.toFixed(3));
       requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
+    })();
   })();
 </script>

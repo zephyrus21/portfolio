@@ -437,36 +437,32 @@ section.in-view .eyebrow .bar {
   position: relative;
   padding: 0.06em 0 0.04em;
   transform-style: preserve-3d;
-  transform: rotateX(calc(var(--my) * -7deg)) rotateY(calc(var(--mx) * 9deg));
-  transition: transform 120ms linear;
+  --rx: 12;
+  --ry: -8;
+  transform: rotateX(calc(var(--my) * var(--ry) * 1deg)) rotateY(calc(var(--mx) * var(--rx) * 1deg));
+}
+
+.hero-name .word:first-child {
+  --rx: 16;
+  --ry: -11;
 }
 
 .hero-name .word:last-child {
-  margin-right: 0;
+  --rx: 7;
+  --ry: -5;
 }
 
 .hero-name .char {
   display: inline-block;
-  will-change: transform;
-  transform-style: preserve-3d;
-  transform:
-    translateX(calc(var(--mx) * var(--cw, 0) * 1px))
-    translateY(calc(var(--my) * var(--ch, 0) * 1px))
-    translateZ(calc(var(--prox, 0) * 30px));
 }
 
-.hero-name .char.italic {
-  font-style: italic;
+.hero-name .char.scrambling {
+  opacity: 0.3;
+  color: var(--ink-soft);
 }
 
-.hero-name .char.entering {
-  transform: translateY(110%);
-  opacity: 0;
-}
-
-.hero-name .char.entered {
-  opacity: 1;
-  transition: transform 1100ms cubic-bezier(.18, .84, .2, 1) var(--cd, 0ms), opacity 700ms ease var(--cd, 0ms);
+.hero-name .char.resolved {
+  transition: opacity 80ms ease;
 }
 
 .hero-meta {
@@ -1065,7 +1061,7 @@ section.in-view .eyebrow .bar {
 }
 
 .socials a:hover .arrow {
-  transform: translate(4px, -4px);
+  transform: translate(2px, -2px);
 }
 
 .socials a::before {

@@ -5,17 +5,74 @@
   <div class="eyebrow reveal"><span class="num">04</span><span class="bar"></span><span>Contact</span></div>
   <h2 class="h-section reveal" style="margin-top: 28px;">Say <em>hello</em>.</h2>
   <div class="socials">
-    <a href="https://github.com/zephyrus21" data-magnetic data-cursor="ring">
+    <a href="https://github.com/zephyrus21" data-cursor="ring">
       <span class="s-label">GitHub</span> <span class="arrow">↗</span>
     </a>
-    <a href="https://linkedin.com/in/zephyrus21" data-magnetic data-cursor="ring">
+    <a href="https://linkedin.com/in/zephyrus21" data-cursor="ring">
       <span class="s-label">LinkedIn</span> <span class="arrow">↗</span>
     </a>
-    <a href="tel:+919114182378" data-magnetic data-cursor="ring">
+    <a href="tel:+919114182378" data-cursor="ring">
       <span class="s-label">+91 · 91141 82378</span> <span class="arrow">↗</span>
     </a>
-    <a href="mailto:pandey.piyus@gmail.com" data-magnetic data-cursor="ring">
+    <a href="mailto:pandey.piyus@gmail.com" data-cursor="ring">
       <span class="s-label">Email</span> <span class="arrow">↗</span>
     </a>
   </div>
 </section>
+
+<script is:inline>
+  (function () {
+    var glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var staticChars = new Set([' ', '+', '·', '.', '-', ',', '@']);
+
+    document.querySelectorAll('.socials a').forEach(function (link) {
+      var label = link.querySelector('.s-label');
+      if (!label) return;
+      var txt = label.textContent;
+
+      /* Split into char spans once on init */
+      label.innerHTML = txt.split('').map(function (c) {
+        if (staticChars.has(c)) return '<span class="sl-s">' + c + '</span>';
+        return '<span class="sl-c">' + c + '</span>';
+      }).join('');
+
+      var spans = Array.from(label.querySelectorAll('.sl-c'));
+      var finals = spans.map(function (s) { return s.textContent; });
+
+      link.addEventListener('pointerenter', function () {
+        var session = {};
+        link._sess = session;
+
+        /* All chars go random immediately */
+        spans.forEach(function (s) {
+          s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+        });
+
+        /* Resolve left-to-right, staggered */
+        spans.forEach(function (s, idx) {
+          var final = finals[idx];
+          setTimeout(function () {
+            if (link._sess !== session) { s.textContent = final; return; }
+            var count = 0;
+            var cycles = 4 + Math.floor(Math.random() * 3);
+            var timer = setInterval(function () {
+              if (link._sess !== session) { s.textContent = final; clearInterval(timer); return; }
+              if (count >= cycles) {
+                s.textContent = final;
+                clearInterval(timer);
+              } else {
+                s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+                count++;
+              }
+            }, 36);
+          }, idx * 38);
+        });
+      });
+
+      link.addEventListener('pointerleave', function () {
+        link._sess = {};
+        spans.forEach(function (s, idx) { s.textContent = finals[idx]; });
+      });
+    });
+  })();
+</script>

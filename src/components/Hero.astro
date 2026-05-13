@@ -33,16 +33,7 @@
   (function heroMotion() {
     var root = document.getElementById('heroName');
     var words = root.querySelectorAll('.word');
-    var isMobile = window.matchMedia('(pointer: coarse)').matches;
     var glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
-    if (isMobile) {
-      words.forEach(function (w) {
-        var italic = w.dataset.italic === 'true';
-        w.innerHTML = italic ? '<em>' + w.dataset.word + '</em>' : w.dataset.word;
-      });
-      return;
-    }
 
     /* Build char spans, start each as a random glyph */
     var allChars = [];
@@ -97,21 +88,5 @@
       }, 35);
     });
 
-    /* 3D tilt — each word has different rotation multipliers set in CSS */
-    var target = { mx: 0, my: 0 };
-    var current = { mx: 0, my: 0 };
-
-    window.addEventListener('pointermove', function (e) {
-      target.mx = (e.clientX / window.innerWidth - 0.5) * 2;
-      target.my = (e.clientY / window.innerHeight - 0.5) * 2;
-    });
-
-    (function loop() {
-      current.mx += (target.mx - current.mx) * 0.06;
-      current.my += (target.my - current.my) * 0.06;
-      root.style.setProperty('--mx', current.mx.toFixed(3));
-      root.style.setProperty('--my', current.my.toFixed(3));
-      requestAnimationFrame(loop);
-    })();
   })();
 </script>

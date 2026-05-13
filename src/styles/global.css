@@ -427,29 +427,12 @@ section.in-view .eyebrow .bar {
   font-size: clamp(48px, min(11vw, 14vh), 160px);
   user-select: none;
   pointer-events: auto;
-  perspective: 1400px;
-  --mx: 0;
-  --my: 0;
 }
 
 .hero-name .word {
   display: block;
   position: relative;
   padding: 0.06em 0 0.04em;
-  transform-style: preserve-3d;
-  --rx: 12;
-  --ry: -8;
-  transform: rotateX(calc(var(--my) * var(--ry) * 1deg)) rotateY(calc(var(--mx) * var(--rx) * 1deg));
-}
-
-.hero-name .word:first-child {
-  --rx: 16;
-  --ry: -11;
-}
-
-.hero-name .word:last-child {
-  --rx: 7;
-  --ry: -5;
 }
 
 .hero-name .char {
@@ -497,21 +480,6 @@ section.in-view .eyebrow .bar {
   }
 }
 
-@media (pointer: coarse) {
-  /* Plain text rendering — no 3D split */
-  .hero-name {
-    perspective: none;
-  }
-  .hero-name .word {
-    display: block;
-    transform: none;
-    transform-style: flat;
-    transition: none;
-  }
-  .hero-name .word em {
-    font-style: italic;
-  }
-}
 
 .hero-bottom {
   position: absolute;

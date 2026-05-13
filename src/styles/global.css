@@ -424,7 +424,7 @@ section.in-view .eyebrow .bar {
   line-height: 0.86;
   letter-spacing: -0.03em;
   font-weight: 400;
-  font-size: clamp(64px, 11vw, 160px);
+  font-size: clamp(48px, min(11vw, 14vh), 160px);
   user-select: none;
   pointer-events: auto;
   perspective: 1400px;
@@ -1757,6 +1757,35 @@ body.theme-solarized .tp-panel-inner {
     right: auto;
     bottom: auto;
     margin-top: 40px;
+  }
+}
+
+/* Medium-height desktop windows — un-absolute hero-bottom before overlap starts */
+@media (max-height: 780px) and (min-width: 801px) {
+  .landing-wrap {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero {
+    justify-content: flex-start;
+    padding-bottom: 56px;
+  }
+
+  .hero .lockup {
+    gap: clamp(12px, 2.5vh, 28px);
+  }
+
+  .hero-meta {
+    margin-top: 6px;
+  }
+
+  .hero-bottom {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin-top: 32px;
   }
 }
 

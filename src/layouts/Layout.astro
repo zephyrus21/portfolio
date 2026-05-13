@@ -14,6 +14,7 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" id="site-favicon" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -123,7 +124,30 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
           r.setProperty('--sans',  '"JetBrains Mono", ui-monospace, monospace');
         }
         window.__heroMotion = t.heroMotion;
+        updateFavicon();
       }
+
+      function updateFavicon() {
+        requestAnimationFrame(function () {
+          var s    = getComputedStyle(document.body);
+          var rs   = getComputedStyle(document.documentElement);
+          var bg   = s.getPropertyValue('--bg').trim();
+          var ink  = s.getPropertyValue('--ink').trim();
+          var font = (rs.getPropertyValue('--serif').trim() || 'serif').replace(/"/g, "'");
+          if (!bg || !ink) return;
+          var svg =
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
+            '<rect width="32" height="32" rx="5" fill="' + ink + '"/>' +
+            '<text x="16" y="24" text-anchor="middle"' +
+            ' font-family="' + font + '"' +
+            ' font-size="22" font-weight="400"' +
+            ' fill="' + bg + '">P</text>' +
+            '</svg>';
+          var link = document.getElementById('site-favicon');
+          if (link) link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+        });
+      }
+
       applyTweaks(window.__TWEAK_DEFAULTS__);
       window.__applyTweaks = applyTweaks;
 

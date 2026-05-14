@@ -75,7 +75,15 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
         <span id="lb-label"></span>
         <span id="lb-location"></span>
       </div>
-      <span id="lb-counter"></span>
+      <div id="lb-actions">
+        <span id="lb-size"></span>
+        <span id="lb-counter"></span>
+        <button id="lb-download" aria-label="Download photo" title="Download">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
   </div>
@@ -83,18 +91,21 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
   <script is:inline>
 (function () {
   var items = Array.from(document.querySelectorAll('.gallery-item[data-index]'));
-  var lb       = document.getElementById('lightbox');
-  var lbImg    = document.getElementById('lb-img');
-  var lbLabel  = document.getElementById('lb-label');
-  var lbLoc    = document.getElementById('lb-location');
-  var lbCtr    = document.getElementById('lb-counter');
-  var lbClose  = document.getElementById('lb-close');
-  var lbPrev   = document.getElementById('lb-prev');
-  var lbNext   = document.getElementById('lb-next');
-  var lbBd     = document.getElementById('lb-backdrop');
+  var lb         = document.getElementById('lightbox');
+  var lbImg      = document.getElementById('lb-img');
+  var lbLabel    = document.getElementById('lb-label');
+  var lbLoc      = document.getElementById('lb-location');
+  var lbCtr      = document.getElementById('lb-counter');
+  var lbSize     = document.getElementById('lb-size');
+  var lbDl       = document.getElementById('lb-download');
+  var lbClose    = document.getElementById('lb-close');
+  var lbPrev     = document.getElementById('lb-prev');
+  var lbNext     = document.getElementById('lb-next');
+  var lbBd       = document.getElementById('lb-backdrop');
 
   var current = 0;
   var total   = items.length;
+  var currentSrc = '';
 
   function show(idx) {
     current = ((idx % total) + total) % total;
@@ -103,19 +114,56 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
     var lbl = el.dataset.label || '';
     var loc = el.dataset.location || '';
 
+    currentSrc = src;
+    lbSize.textContent = '';
     lbImg.classList.add('lb-loading');
     lbImg.alt = lbl;
     if (src) {
       var tmp = new Image();
-      tmp.onload = function () { lbImg.src = src; lbImg.classList.remove('lb-loading'); };
+      tmp.onload = function () {
+        lbImg.src = src;
+        lbImg.classList.remove('lb-loading');
+        var dims = tmp.naturalWidth + ' × ' + tmp.naturalHeight;
+        lbSize.textContent = dims;
+        fetch(src, { method: 'HEAD' })
+          .then(function (r) {
+            var bytes = parseInt(r.headers.get('content-length') || '0', 10);
+            if (bytes > 0) {
+              var sizeStr = bytes >= 1048576
+                ? (bytes / 1048576).toFixed(1) + ' MB'
+                : Math.round(bytes / 1024) + ' KB';
+              lbSize.textContent = dims + '  ·  ' + sizeStr;
+            }
+          })
+          .catch(function () {});
+      };
       tmp.onerror = function () { lbImg.src = src; lbImg.classList.remove('lb-loading'); };
       tmp.src = src;
     }
 
     lbLabel.textContent = lbl;
-    lbLoc.textContent   = loc ? ' ' + loc : '';
+    lbLoc.textContent   = loc || '';
     lbCtr.textContent   = (current + 1) + ' / ' + total;
   }
+
+  lbDl.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (!currentSrc) return;
+    fetch(currentSrc)
+      .then(function (r) { return r.blob(); })
+      .then(function (blob) {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        var item = items[current];
+        var name = (item.dataset.label || 'photo').replace(/\s+/g, '-').toLowerCase();
+        a.download = name + '.jpg';
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
+      })
+      .catch(function () {
+        window.open(currentSrc, '_blank');
+      });
+  });
 
   function open(idx) {
     show(idx);
@@ -237,13 +285,48 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
     display: block;
   }
 
+  #lb-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  #lb-size {
+    font-family: var(--mono, monospace);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.28);
+    white-space: nowrap;
+  }
+
   #lb-counter {
     font-family: var(--mono, monospace);
     font-size: 11px;
     letter-spacing: 0.12em;
     color: rgba(255,255,255,0.35);
     white-space: nowrap;
+  }
+
+  #lb-download {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.6);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: border-color 180ms ease, color 180ms ease, background 180ms ease;
     flex-shrink: 0;
+  }
+
+  #lb-download:hover {
+    border-color: rgba(255,255,255,0.5);
+    color: #fff;
+    background: rgba(255,255,255,0.08);
   }
 
   /* close button — top-right of viewport */

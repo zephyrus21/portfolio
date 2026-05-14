@@ -1,29 +1,52 @@
 ---
+interface Props {
+  variant?: 'home' | 'page';
+  active?: 'blog' | 'gallery';
+}
+const { variant = 'home', active } = Astro.props;
+const isPage = variant === 'page';
 ---
 
 <header class="chrome">
-  <div class="mark">
-    <span class="dot"></span><span class="mark-text" data-scramble>PIYUSH PANDEY · SWE · IDX/21</span>
-  </div>
+  {isPage
+    ? <a class="mark" href="/"><span class="dot"></span><span class="mark-text" data-scramble>PIYUSH PANDEY · SWE · IDX/21</span></a>
+    : <div class="mark"><span class="dot"></span><span class="mark-text" data-scramble>PIYUSH PANDEY · SWE · IDX/21</span></div>
+  }
   <nav>
-    <a href="#about" data-magnetic data-nav>
-      <span class="nav-num">01</span><span class="nav-label" data-text="About">About</span>
-    </a>
-    <a href="#work" data-magnetic data-nav>
-      <span class="nav-num">02</span><span class="nav-label" data-text="Work">Work</span>
-    </a>
-    <a href="#experience" data-magnetic data-nav>
-      <span class="nav-num">03</span><span class="nav-label" data-text="Experience">Experience</span>
-    </a>
-    <a href="#contact" data-magnetic data-nav>
-      <span class="nav-num">04</span><span class="nav-label" data-text="Contact">Contact</span>
-    </a>
-    <a href="/blog" data-magnetic data-nav>
-      <span class="nav-num">05</span><span class="nav-label" data-text="Blog">Blog</span>
-    </a>
-    <a href="/gallery" data-magnetic data-nav>
-      <span class="nav-num">06</span><span class="nav-label" data-text="Gallery">Gallery</span>
-    </a>
+    {isPage ? (
+      <>
+        <a href="/" data-magnetic data-nav>
+          <span class="nav-num">↩</span><span class="nav-label" data-text="Home">Home</span>
+        </a>
+        <a href="/blog" data-magnetic data-nav class={active === 'blog' ? 'nav-active' : ''}>
+          <span class="nav-num">01</span><span class="nav-label" data-text="Blog">Blog</span>
+        </a>
+        <a href="/gallery" data-magnetic data-nav class={active === 'gallery' ? 'nav-active' : ''}>
+          <span class="nav-num">02</span><span class="nav-label" data-text="Gallery">Gallery</span>
+        </a>
+      </>
+    ) : (
+      <>
+        <a href="#about" data-magnetic data-nav>
+          <span class="nav-num">01</span><span class="nav-label" data-text="About">About</span>
+        </a>
+        <a href="#work" data-magnetic data-nav>
+          <span class="nav-num">02</span><span class="nav-label" data-text="Work">Work</span>
+        </a>
+        <a href="#experience" data-magnetic data-nav>
+          <span class="nav-num">03</span><span class="nav-label" data-text="Experience">Experience</span>
+        </a>
+        <a href="#contact" data-magnetic data-nav>
+          <span class="nav-num">04</span><span class="nav-label" data-text="Contact">Contact</span>
+        </a>
+        <a href="/blog" data-magnetic data-nav>
+          <span class="nav-num">05</span><span class="nav-label" data-text="Blog">Blog</span>
+        </a>
+        <a href="/gallery" data-magnetic data-nav>
+          <span class="nav-num">06</span><span class="nav-label" data-text="Gallery">Gallery</span>
+        </a>
+      </>
+    )}
   </nav>
   <div class="chrome-right">
 
@@ -99,12 +122,22 @@
 </div>
 
 <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
-  <a href="#about" style="--nd:60ms"><span class="mn-num">01</span>About</a>
-  <a href="#work" style="--nd:120ms"><span class="mn-num">02</span>Work</a>
-  <a href="#experience" style="--nd:180ms"><span class="mn-num">03</span>Experience</a>
-  <a href="#contact" style="--nd:240ms"><span class="mn-num">04</span>Contact</a>
-  <a href="/blog" style="--nd:300ms"><span class="mn-num">05</span>Blog</a>
-  <a href="/gallery" style="--nd:360ms"><span class="mn-num">06</span>Gallery</a>
+  {isPage ? (
+    <>
+      <a href="/" style="--nd:60ms"><span class="mn-num">↩</span>Home</a>
+      <a href="/blog" style="--nd:120ms"><span class="mn-num">01</span>Blog</a>
+      <a href="/gallery" style="--nd:180ms"><span class="mn-num">02</span>Gallery</a>
+    </>
+  ) : (
+    <>
+      <a href="#about" style="--nd:60ms"><span class="mn-num">01</span>About</a>
+      <a href="#work" style="--nd:120ms"><span class="mn-num">02</span>Work</a>
+      <a href="#experience" style="--nd:180ms"><span class="mn-num">03</span>Experience</a>
+      <a href="#contact" style="--nd:240ms"><span class="mn-num">04</span>Contact</a>
+      <a href="/blog" style="--nd:300ms"><span class="mn-num">05</span>Blog</a>
+      <a href="/gallery" style="--nd:360ms"><span class="mn-num">06</span>Gallery</a>
+    </>
+  )}
 </nav>
 
 <script is:inline>
@@ -259,3 +292,12 @@
     });
   })();
 </script>
+
+<style>
+  .chrome .mark {
+    text-decoration: none;
+  }
+  .nav-active .nav-label {
+    opacity: 0.5;
+  }
+</style>

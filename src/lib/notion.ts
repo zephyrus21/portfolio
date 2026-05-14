@@ -11,6 +11,7 @@ const GALLERY_DB_ID = import.meta.env.NOTION_GALLERY_DATABASE_ID;
 export interface GalleryPhoto {
   id: string;
   label: string;
+  location: string;
   aspect: 'tall' | 'wide' | 'square' | 'portrait' | 'landscape';
   imageUrl: string;
   order: number;
@@ -78,6 +79,7 @@ export async function getGalleryPhotos(): Promise<GalleryPhoto[]> {
     return {
       id: page.id,
       label: getTitleProp(props),
+      location: getText(props.Location),
       aspect,
       imageUrl,
       order: props.Order?.number ?? 0,

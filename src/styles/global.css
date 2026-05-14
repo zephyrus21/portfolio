@@ -4,8 +4,6 @@
   --ink: #14110d;
   --ink-soft: #4a4640;
   --rule: rgba(20, 17, 13, 0.14);
-  --accent: #14110d;
-
   --serif: "Instrument Serif", "Newsreader", Georgia, serif;
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -1141,7 +1139,6 @@ body.theme-warm {
   --ink: #14110d;
   --ink-soft: #4a4640;
   --rule: rgba(20, 17, 13, 0.14);
-  --accent: #14110d;
 }
 
 body.theme-dark {
@@ -1150,7 +1147,6 @@ body.theme-dark {
   --ink: #f1ece2;
   --ink-soft: #8c857a;
   --rule: rgba(241, 236, 226, 0.14);
-  --accent: #f1ece2;
 }
 
 body.theme-cool {
@@ -1159,7 +1155,6 @@ body.theme-cool {
   --ink: #0c111a;
   --ink-soft: #44505f;
   --rule: rgba(12, 17, 26, 0.14);
-  --accent: #1a3a82;
 }
 
 body.theme-catppuccin {
@@ -1168,7 +1163,6 @@ body.theme-catppuccin {
   --ink: #cdd6f4;
   --ink-soft: #a6adc8;
   --rule: rgba(205, 214, 244, 0.1);
-  --accent: #cba6f7;
 }
 
 body.theme-nord {
@@ -1177,7 +1171,6 @@ body.theme-nord {
   --ink: #eceff4;
   --ink-soft: #9099a9;
   --rule: rgba(236, 239, 244, 0.1);
-  --accent: #88c0d0;
 }
 
 body.theme-gruvbox {
@@ -1186,7 +1179,6 @@ body.theme-gruvbox {
   --ink: #ebdbb2;
   --ink-soft: #a89984;
   --rule: rgba(235, 219, 178, 0.1);
-  --accent: #fe8019;
 }
 
 body.theme-rose-pine {
@@ -1195,7 +1187,6 @@ body.theme-rose-pine {
   --ink: #e0def4;
   --ink-soft: #908caa;
   --rule: rgba(224, 222, 244, 0.1);
-  --accent: #c4a7e7;
 }
 
 /* Light themes */
@@ -1205,7 +1196,6 @@ body.theme-latte {
   --ink: #4c4f69;
   --ink-soft: #7c7f93;
   --rule: rgba(76, 79, 105, 0.13);
-  --accent: #8839ef;
 }
 
 body.theme-parchment {
@@ -1214,7 +1204,6 @@ body.theme-parchment {
   --ink: #2c2416;
   --ink-soft: #6b5c45;
   --rule: rgba(44, 36, 22, 0.13);
-  --accent: #8b4513;
 }
 
 body.theme-forest {
@@ -1223,7 +1212,6 @@ body.theme-forest {
   --ink: #1a2e1a;
   --ink-soft: #4a6741;
   --rule: rgba(26, 46, 26, 0.13);
-  --accent: #2d6a2d;
 }
 
 body.theme-lavender {
@@ -1232,7 +1220,6 @@ body.theme-lavender {
   --ink: #2a1f3d;
   --ink-soft: #6b5a8a;
   --rule: rgba(42, 31, 61, 0.13);
-  --accent: #7c3aed;
 }
 
 /* Dark themes */
@@ -1242,7 +1229,6 @@ body.theme-dracula {
   --ink: #f8f8f2;
   --ink-soft: #9096a2;
   --rule: rgba(248, 248, 242, 0.1);
-  --accent: #ff79c6;
 }
 
 body.theme-monokai {
@@ -1251,7 +1237,6 @@ body.theme-monokai {
   --ink: #f8f8f2;
   --ink-soft: #90908a;
   --rule: rgba(248, 248, 242, 0.1);
-  --accent: #a6e22e;
 }
 
 body.theme-tokyo {
@@ -1260,7 +1245,6 @@ body.theme-tokyo {
   --ink: #c0caf5;
   --ink-soft: #737aa2;
   --rule: rgba(192, 202, 245, 0.1);
-  --accent: #7aa2f7;
 }
 
 body.theme-solarized {
@@ -1269,7 +1253,6 @@ body.theme-solarized {
   --ink: #839496;
   --ink-soft: #586e75;
   --rule: rgba(131, 148, 150, 0.15);
-  --accent: #268bd2;
 }
 
 /* ── Theme picker ── */

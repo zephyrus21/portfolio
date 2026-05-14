@@ -25,6 +25,7 @@ export interface BlogPost {
   date: string;
   year: string;
   readTime: string;
+  coverImage: string;
 }
 
 export interface BlogPostWithContent extends BlogPost {
@@ -43,6 +44,14 @@ function getText(prop: any): string {
 function getTitleProp(props: any): string {
   const titleProp = Object.values(props).find((p: any) => p.type === 'title') as any;
   return titleProp ? getText(titleProp) : '';
+}
+
+function getCover(page: any): string {
+  const prop = page.properties?.Cover;
+  if (!prop) return '';
+  if (prop.type === 'url') return prop.url ?? '';
+  if (prop.type === 'rich_text') return prop.rich_text?.[0]?.plain_text ?? '';
+  return '';
 }
 
 function estimateReadTime(wordCount: number): string {
@@ -99,6 +108,7 @@ export async function getPublishedPosts(): Promise<BlogPost[]> {
       date: dateStr,
       year,
       readTime: getText(props.ReadTime) || '5 min read',
+      coverImage: getCover(page),
     };
   });
 }
@@ -136,6 +146,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPostWithContent |
     date: dateStr,
     year,
     readTime: getText(props.ReadTime) || estimateReadTime(wordCount),
+    coverImage: getCover(page),
     contentHtml,
   };
 }

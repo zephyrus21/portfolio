@@ -13,14 +13,23 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Piyush Pandey — Software Engineer building event pipelines and quiet backends. Go microservices, distributed systems, observability." />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" id="site-favicon" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <!-- Apply theme before paint to avoid flash -->
     <script is:inline>
       (function () {
@@ -171,14 +180,19 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
       (function () {
         if (window.matchMedia('(pointer: coarse)').matches) return;
         var c = document.getElementById('cursor');
-        var x = 0, y = 0, tx = 0, ty = 0;
-        window.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; });
+        var x = 0, y = 0, tx = 0, ty = 0, rafId = null;
         function loop() {
+          rafId = null;
           x += (tx - x) * 0.22; y += (ty - y) * 0.22;
           c.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
-          requestAnimationFrame(loop);
+          if (Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5) {
+            rafId = requestAnimationFrame(loop);
+          }
         }
-        loop();
+        window.addEventListener('pointermove', function (e) {
+          tx = e.clientX; ty = e.clientY;
+          if (!rafId) rafId = requestAnimationFrame(loop);
+        });
         document.querySelectorAll('a, button, .work-row, [data-cursor="ring"]').forEach(function (el) {
           el.addEventListener('pointerenter', function () { c.classList.add('ring'); });
           el.addEventListener('pointerleave', function () { c.classList.remove('ring'); });

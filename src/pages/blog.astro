@@ -8,12 +8,12 @@ const posts = await getPublishedPosts();
 Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate=600');
 ---
 
-<Layout title="Writing — Piyush Pandey">
+<Layout title="Blog — Piyush Pandey">
   <PageChrome active="blog" />
 
   <main class="page-main">
     <section class="page-hero">
-      <div class="eyebrow reveal"><span class="num">01</span><span class="bar"></span><span>Writing</span></div>
+      <div class="eyebrow reveal"><span class="num">01</span><span class="bar"></span><span>Blog</span></div>
       <h1 class="h-display reveal" style="margin-top: 28px;">
         Notes from the <em>margins</em>.
       </h1>
@@ -22,10 +22,10 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
       </p>
     </section>
 
-    <section class="writing-page-section">
-      <div class="writing-list">
+    <section class="blog-page-section">
+      <div class="blog-list">
         {posts.map((post) => (
-          <a class="writing-row reveal" href={`/blog/${post.slug}`}>
+          <a class="blog-row reveal" href={`/blog/${post.slug}`}>
             <span class="date">{post.year}</span>
             <span class="title">{post.title}</span>
             <span class="tag">{post.tag}</span>
@@ -59,12 +59,12 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
     line-height: 1.4;
   }
 
-  .writing-page-section {
+  .blog-page-section {
     padding: 0 var(--gutter) var(--pad-y);
     border-top: 1px solid var(--rule);
   }
 
-  .writing-list {
+  .blog-list {
     margin-top: 0;
     display: flex;
     flex-direction: column;

@@ -423,7 +423,7 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 2px;
   }
 
@@ -559,14 +559,20 @@ Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate
     transform: translate(0, 0);
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 1000px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 700px) {
     .gallery-grid {
       grid-template-columns: repeat(2, 1fr);
     }
     .gallery-item--wide { grid-column: span 2; }
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 480px) {
     .gallery-grid {
       grid-template-columns: 1fr;
     }

@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PageChrome from '../../components/PageChrome.astro';
+import Chrome from '../../components/Chrome.astro';
 import Footer from '../../components/Footer.astro';
 import { getPostBySlug } from '../../lib/notion';
 
@@ -10,8 +10,12 @@ if (!post) return Astro.redirect('/blog');
 Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate=600');
 ---
 
-<Layout title={`${post.title} — Piyush Pandey`}>
-  <PageChrome active="blog" />
+<Layout
+  title={`${post.title} — Piyush Pandey`}
+  description={post.subtitle || `${post.title} — a post by Piyush Pandey on software engineering, Go, and distributed systems.`}
+  ogImage={post.coverImage || '/og.png'}
+>
+  <Chrome variant="page" active="blog" />
 
   <main class="page-main">
     <article class="post">

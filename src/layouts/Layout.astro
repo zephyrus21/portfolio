@@ -3,9 +3,53 @@ import '../styles/global.css';
 
 interface Props {
   title?: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
 }
 
-const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
+const {
+  title = 'Piyush Pandey — Software Engineer · Go & Distributed Systems',
+  description = 'Piyush Pandey — backend software engineer (SDE) building event-driven systems and Go microservices at scale. Distributed systems, ad-tech & startup backends, observability. Available for contract, freelance, and full-time work.',
+  ogImage = '/og.png',
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Piyush Pandey',
+  url: 'https://piyushify.com',
+  image: ogImageUrl,
+  jobTitle: 'Software Engineer',
+  email: 'mailto:pandey.piyus@gmail.com',
+  description:
+    'Backend software engineer building event-driven systems and Go microservices at scale — distributed systems, ad-tech and startup backends, observability.',
+  knowsAbout: [
+    'Software Engineering',
+    'Backend Development',
+    'Go (Golang)',
+    'Microservices',
+    'Distributed Systems',
+    'Event-Driven Architecture',
+    'Event Pipelines',
+    'Ad Tech',
+    'Observability',
+    'Startups',
+    'Cloud Infrastructure',
+  ],
+  sameAs: [
+    'https://github.com/zephyrus21',
+    'https://linkedin.com/in/zephyrus21',
+  ],
+  seeks: {
+    '@type': 'Demand',
+    name: 'Software engineering contract, freelance, and full-time opportunities',
+  },
+};
 ---
 
 <!doctype html>
@@ -13,8 +57,33 @@ const { title = 'Piyush Pandey — Software Engineer' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Piyush Pandey — Software Engineer building event pipelines and quiet backends. Go microservices, distributed systems, observability." />
+    <meta name="description" content={description} />
+    <meta name="author" content="Piyush Pandey" />
+    <meta name="theme-color" content="#14110d" />
+    {noindex
+      ? <meta name="robots" content="noindex, nofollow" />
+      : <meta name="robots" content="index, follow, max-image-preview:large" />}
+    <link rel="canonical" href={canonical} />
     <title>{title}</title>
+
+    <!-- Open Graph (LinkedIn, Slack, Facebook) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Piyush Pandey" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
     <link rel="icon" type="image/svg+xml" id="site-favicon" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />

@@ -8,7 +8,10 @@ const posts = await getPublishedPosts();
 Astro.response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate=600');
 ---
 
-<Layout title="Blog — Piyush Pandey">
+<Layout
+  title="Blog — Piyush Pandey"
+  description="Writing by Piyush Pandey on backend engineering, Go microservices, distributed systems, event-driven architecture, and building software at startups."
+>
   <Chrome variant="page" active="blog" />
 
   <main class="page-main">

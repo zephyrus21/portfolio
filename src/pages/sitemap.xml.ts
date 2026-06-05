@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getPublishedPosts } from '../lib/notion';
 
-const SITE = 'https://piyushify.com';
+const SITE = 'https://www.piyushify.com';
 
 export const GET: APIRoute = async () => {
   const staticPages = [
